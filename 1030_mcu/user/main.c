@@ -163,11 +163,18 @@ xdata unsigned  short g_default_time[]={0,240,30,25,240,10,15,12,35,20,5,15,600,
  unsigned short g_working_counter=0;
  unsigned char g_err_code=0;
  unsigned char g_dai_P=0;
+ unsigned char g_dai_no_P=0;
  unsigned char g_peng_ren_chang_duan_shi_jian=0;
  unsigned char g_P_bao_ya_counter_start=0;
  unsigned char g_peng_ren_over=0;
  unsigned char g_hoting=0;
  u16 g_currnet_temp=0;
+ u32 g_RLY_work_time=0;
+ unsigned char g_yu_yue_ing=0;
+ u32 g_stop_counter=0;
+
+char g_fun_index1=0;
+char g_fun_index2=0;
 void Delay_1us(unsigned int n)	   
 {
 	unsigned char i;
@@ -250,7 +257,7 @@ void  buzzer(char type)
 	else if(type==4)
 	{
 		PWM3C = 0x97; 						//使能PWM3，关闭中断，允许输出，时钟4分频
-		t0=5000;
+		t0=2500;
 	}
 	else if(type==5)
 	{
@@ -349,17 +356,20 @@ void get_temp()
 		}
 	}
 
-	if(ntc_adc==0 && g_err_code==0)
+	if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc==0 && g_err_code==0)
 	{
-		Delay_ms(2);
-		if(get_ntc_adc()==0)
+		if(g_RLY_work_time>30000)
 		{
-			g_err_code=1;
-			buzzer(4);
+			Delay_ms(2);
+			if(get_ntc_adc()==0)
+			{
+				g_err_code=1;
+				buzzer(4);
+			}
 		}
 		
 	}
-	else if(ntc_adc>=4090 && g_err_code==0)
+	else if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc>=4090 && g_err_code==0)
 	{
 		Delay_ms(2);
 		if(get_ntc_adc()>=4090)
@@ -368,12 +378,12 @@ void get_temp()
 			buzzer(4);
 		}
 	}
-	else if(ntc_adc>3676 && g_err_code==0)
+	else if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc>3676 && g_err_code==0)
 	{
 		Delay_ms(2);
 		if(get_ntc_adc()>3676)
 		{
-			g_err_code=3;
+			// g_err_code=3;
 			buzzer(4);
 		}
 	}
@@ -382,7 +392,7 @@ void get_temp()
 }
 void check_ya_li_kai_guan()
 {
-	if(g_currnet_temp<80 && KG==1 && g_err_code==0)
+	if(g_yu_yue_shi_jian==0 && g_work_start==1 && g_currnet_temp<80 && KG==1 && g_err_code==0)
 	{
 		g_err_code=4;
 		buzzer(4);
@@ -598,7 +608,7 @@ void show_shu_ma_guan_seting()
 				g_shi_jian_liang_dian=0;
 			}
 			
-			if(g_yu_yue_shi_jian>0)
+			if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
 			{
 				g_shu_ma_guan[0]=g_yu_yue_shi_jian/600;
 				g_shu_ma_guan[1]=(g_yu_yue_shi_jian%600)/60;
@@ -638,15 +648,16 @@ void show_shu_ma_guan_working()
 			g_shu_ma_guan[0]=g_peng_ren_shi_chang/600;
 			g_shu_ma_guan[1]=(g_peng_ren_shi_chang%600)/60;
 			g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
-			g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;
-
+			g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;		
 			if(g_yu_yue_shi_jian>0)
 			{
 				g_shu_ma_guan[0]=g_yu_yue_shi_jian/600;
 				g_shu_ma_guan[1]=(g_yu_yue_shi_jian%600)/60;
 				g_shu_ma_guan[2]=(g_yu_yue_shi_jian%60)/10;
 				g_shu_ma_guan[3]=g_yu_yue_shi_jian%10;
+				
 			}
+				
 			if(t1==1)
 			{
 				g_shi_jian_liang_dian=1;
@@ -659,7 +670,12 @@ void show_shu_ma_guan_working()
 			{
 				t1=0;
 			}	
-			t1++;
+			t1++;				
+
+			if(g_dai_no_P==1 && g_P_bao_ya_counter_start==0)
+			{
+				g_shi_jian_liang_dian=1;
+			}	
 
 		}
 		else
@@ -775,6 +791,39 @@ void show_none()
 	g_P_led=0;
 
 }
+void show_all()
+{
+	g_din_wen_peng_ren_led=1;
+	g_dun_rou_led=1;
+	g_dun_tang_led=1;
+	g_lao_huo_man_dun_led=1;
+	g_jian_kang_zheng_led=1;
+	g_jian_cao_led=1;
+	g_suan_nao_led=1;
+	g_fa_jiao_led=1;
+	g_xiao_du_led=1;
+	g_dan_gao_led=1;
+	g_feng_pei_led=1;
+	g_ji_ya_led=1;
+	g_mi_fan_led=1;
+	g_dou_lei_led=1;
+	g_zha_liang_led=1;
+	g_yan_mai_led=1;
+	g_ji_dan_led=1;
+	g_bao_wen_led=1;
+	g_chang_duan_led[0]=1;
+	g_chang_duan_led[1]=1;
+	g_chang_duan_led[2]=1;
+
+	g_shu_ma_guan[0]=8;
+	g_shu_ma_guan[1]=8;
+	g_shu_ma_guan[2]=8;
+	g_shu_ma_guan[3]=8;
+	
+	g_L_led=1;
+	g_P_led=1;
+
+}
 void show_stop()
 {
 	show_none();
@@ -782,6 +831,7 @@ void show_stop()
 	g_shu_ma_guan[1]=0;
 	g_shu_ma_guan[2]=0;
 	g_shu_ma_guan[3]=0;
+	g_shi_jian_liang_dian=0;
 	if(g_kid_lock==1)
 	{
 		g_L_led=1;
@@ -793,48 +843,36 @@ void show_stop()
 		g_shu_ma_guan[2]='E';
 		g_shu_ma_guan[3]=g_err_code;
 	}
-
-}
-void show_chang_duan(unsigned short a,unsigned short b)
-{
-	if(g_work_start==0)
+	if(g_stop_counter>240000)
 	{
-		if(a<b){
-			g_chang_duan_led[0]=1;
-			g_chang_duan_led[1]=0;
-			g_chang_duan_led[2]=0;
-			g_peng_ren_chang_duan_shi_jian=0;
-		}
-		else if(a==b){
-			g_chang_duan_led[0]=1;
-			g_chang_duan_led[1]=1;
-			g_chang_duan_led[2]=0;
-			g_peng_ren_chang_duan_shi_jian=1;
-		}
-		else if(a>b){
-			g_chang_duan_led[0]=1;
-			g_chang_duan_led[1]=1;
-			g_chang_duan_led[2]=1;
-			g_peng_ren_chang_duan_shi_jian=2;
-		}
+		g_shu_ma_guan[0]='X';
+		g_shu_ma_guan[1]='X';
+		g_shu_ma_guan[2]='X';
+		g_shu_ma_guan[3]='X';
 	}
 	else
 	{
-		if(g_peng_ren_chang_duan_shi_jian==0){
-			g_chang_duan_led[0]=1;
-			g_chang_duan_led[1]=0;
-			g_chang_duan_led[2]=0;
-		}
-		else if(g_peng_ren_chang_duan_shi_jian==1){
-			g_chang_duan_led[0]=1;
-			g_chang_duan_led[1]=1;
-			g_chang_duan_led[2]=0;
-		}
-		else if(g_peng_ren_chang_duan_shi_jian==2){
-			g_chang_duan_led[0]=1;
-			g_chang_duan_led[1]=1;
-			g_chang_duan_led[2]=1;
-		}
+		g_stop_counter+=2;
+	}
+
+}
+void show_chang_duan()
+{
+
+	if(g_peng_ren_chang_duan_shi_jian==0){
+		g_chang_duan_led[0]=1;
+		g_chang_duan_led[1]=0;
+		g_chang_duan_led[2]=0;
+	}
+	else if(g_peng_ren_chang_duan_shi_jian==1){
+		g_chang_duan_led[0]=1;
+		g_chang_duan_led[1]=1;
+		g_chang_duan_led[2]=0;
+	}
+	else if(g_peng_ren_chang_duan_shi_jian==2){
+		g_chang_duan_led[0]=1;
+		g_chang_duan_led[1]=1;
+		g_chang_duan_led[2]=1;
 	}
 
 }
@@ -847,33 +885,33 @@ void show_led()
 		break;
 		case DUN_ROU:
 			g_dun_rou_led=1;
-			show_chang_duan(g_peng_ren_shi_chang,g_default_time[DUN_ROU]);
+			show_chang_duan();
 		break;		
 		case DUN_TANG:
 			g_dun_tang_led=1;	
-			show_chang_duan(g_peng_ren_shi_chang,g_default_time[DUN_TANG]);
+			show_chang_duan();
 		break;
 		case LAO_HUO_MAN_DUN:
 			g_lao_huo_man_dun_led=1;
 		break;
 		case JIAN_KANG_ZHENG:
 			g_jian_kang_zheng_led=1;
-			show_chang_duan(g_peng_ren_shi_chang,g_default_time[JIAN_KANG_ZHENG]);
+			show_chang_duan();
 		break;
 		case JIAN_CAO:
 			g_jian_cao_led=1;
 		break;
 		case MI_FAN:
 			g_mi_fan_led=1;
-			show_chang_duan(g_peng_ren_shi_chang,g_default_time[MI_FAN]);
+			show_chang_duan();
 		break;
 		case DOU_LEI:
 			g_dou_lei_led=1;
-			show_chang_duan(g_peng_ren_shi_chang,g_default_time[DOU_LEI]);
+			show_chang_duan();
 		break;
 		case ZHA_LIANG:
 			g_zha_liang_led=1;
-			show_chang_duan(g_peng_ren_shi_chang,g_default_time[ZHA_LIANG]);
+			show_chang_duan();
 		break;
 		case YAN_MAI:
 			g_yan_mai_led=1;
@@ -972,12 +1010,12 @@ void key_scan()
 } 
 void key_plus()
 {
-	if(g_yu_yue_shi_jian>0)
+	if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
 	{
 		g_yu_yue_shi_jian+=30;
 		if(g_yu_yue_shi_jian>24*60)
 		{
-			g_yu_yue_shi_jian=30;
+			g_yu_yue_shi_jian=0;
 		}
 	}
 	else
@@ -1008,7 +1046,7 @@ void key_plus()
 		}
 		else if(g_work_mode==LAO_HUO_MAN_DUN)
 		{
-			g_peng_ren_shi_chang+=60;
+			g_peng_ren_shi_chang+=30;
 			if(g_peng_ren_shi_chang>10*60)
 			{
 				g_peng_ren_shi_chang=2*60;
@@ -1072,7 +1110,7 @@ void key_plus()
 		}
 		else if(g_work_mode==SUAN_NAO)
 		{
-			g_peng_ren_shi_chang+=60;
+			g_peng_ren_shi_chang+=30;
 			if(g_peng_ren_shi_chang>12*60)
 			{
 				g_peng_ren_shi_chang=6*60;
@@ -1080,7 +1118,7 @@ void key_plus()
 		}
 		else if(g_work_mode==FA_JIAO)
 		{
-			g_peng_ren_shi_chang+=60;
+			g_peng_ren_shi_chang+=10;
 			if(g_peng_ren_shi_chang>7*60)
 			{
 				g_peng_ren_shi_chang=2*60;
@@ -1122,16 +1160,16 @@ void key_plus()
 }
 void key_jian()
 {
-	if(g_yu_yue_shi_jian>0)
+	if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
 	{
 		
-		if(g_yu_yue_shi_jian>=30)
+		if(g_yu_yue_shi_jian==0)
+		{
+			g_yu_yue_shi_jian=24*60;			
+		}
+		else
 		{
 			g_yu_yue_shi_jian-=30;
-			if(g_yu_yue_shi_jian==0)
-			{
-				g_yu_yue_shi_jian=24*60;
-			}
 		}
 
 	}
@@ -1176,7 +1214,7 @@ void key_jian()
 		{
 			if(g_peng_ren_shi_chang>=2*60)
 			{
-				g_peng_ren_shi_chang-=60;
+				g_peng_ren_shi_chang-=30;
 				if(g_peng_ren_shi_chang<2*60)
 				{
 					g_peng_ren_shi_chang=10*60;
@@ -1265,7 +1303,7 @@ void key_jian()
 		{
 			if(g_peng_ren_shi_chang>=6*60)
 			{
-				g_peng_ren_shi_chang-=60;
+				g_peng_ren_shi_chang-=30;
 				if(g_peng_ren_shi_chang<6*60)
 				{
 					g_peng_ren_shi_chang=12*60;
@@ -1277,7 +1315,7 @@ void key_jian()
 		{
 			if(g_peng_ren_shi_chang>=2*60)
 			{
-				g_peng_ren_shi_chang-=60;
+				g_peng_ren_shi_chang-=10;
 				if(g_peng_ren_shi_chang<2*60)
 				{
 					g_peng_ren_shi_chang=7*60;
@@ -1339,16 +1377,19 @@ void xiao_peng_ren_shi_jian()
 		{
 			g_peng_ren_shi_chang=35;
 			g_xiao_peng_ren_shi_jian=1;
+			g_peng_ren_chang_duan_shi_jian=2;
 		}
 		else if(g_xiao_peng_ren_shi_jian==1)
 		{
 			g_peng_ren_shi_chang=25;
 			g_xiao_peng_ren_shi_jian=2;
+			g_peng_ren_chang_duan_shi_jian=0;
 		}
 		else if(g_xiao_peng_ren_shi_jian==2)
 		{
 			g_peng_ren_shi_chang=30;
 			g_xiao_peng_ren_shi_jian=0;
+			g_peng_ren_chang_duan_shi_jian=1;
 		}
 	}
 	else if(g_work_mode==DUN_TANG)
@@ -1357,16 +1398,19 @@ void xiao_peng_ren_shi_jian()
 		{
 			g_peng_ren_shi_chang=30;
 			g_xiao_peng_ren_shi_jian=1;
+			g_peng_ren_chang_duan_shi_jian=2;
 		}
 		else if(g_xiao_peng_ren_shi_jian==1)
 		{
 			g_peng_ren_shi_chang=20;
 			g_xiao_peng_ren_shi_jian=2;
+			g_peng_ren_chang_duan_shi_jian=0;
 		}
 		else if(g_xiao_peng_ren_shi_jian==2)
 		{
 			g_peng_ren_shi_chang=25;
 			g_xiao_peng_ren_shi_jian=0;
+			g_peng_ren_chang_duan_shi_jian=1;
 		}
 	}
 	else if(g_work_mode==JIAN_KANG_ZHENG)
@@ -1375,16 +1419,19 @@ void xiao_peng_ren_shi_jian()
 		{
 			g_peng_ren_shi_chang=15;
 			g_xiao_peng_ren_shi_jian=1;
+			g_peng_ren_chang_duan_shi_jian=2;
 		}
 		else if(g_xiao_peng_ren_shi_jian==1)
 		{
 			g_peng_ren_shi_chang=5;
 			g_xiao_peng_ren_shi_jian=2;
+			g_peng_ren_chang_duan_shi_jian=0;
 		}
 		else if(g_xiao_peng_ren_shi_jian==2)
 		{
 			g_peng_ren_shi_chang=10;
 			g_xiao_peng_ren_shi_jian=0;
+			g_peng_ren_chang_duan_shi_jian=1;
 		}
 	}
 	else if(g_work_mode==MI_FAN)
@@ -1393,16 +1440,19 @@ void xiao_peng_ren_shi_jian()
 		{
 			g_peng_ren_shi_chang=15;
 			g_xiao_peng_ren_shi_jian=1;
+			g_peng_ren_chang_duan_shi_jian=2;
 		}
 		else if(g_xiao_peng_ren_shi_jian==1)
 		{
 			g_peng_ren_shi_chang=10;
 			g_xiao_peng_ren_shi_jian=2;
+			g_peng_ren_chang_duan_shi_jian=0;	
 		}
 		else if(g_xiao_peng_ren_shi_jian==2)
 		{
 			g_peng_ren_shi_chang=12;
 			g_xiao_peng_ren_shi_jian=0;
+			g_peng_ren_chang_duan_shi_jian=1;
 		}
 	}
 	else if(g_work_mode==DOU_LEI)
@@ -1411,16 +1461,19 @@ void xiao_peng_ren_shi_jian()
 		{
 			g_peng_ren_shi_chang=40;
 			g_xiao_peng_ren_shi_jian=1;
+			g_peng_ren_chang_duan_shi_jian=2;
 		}
 		else if(g_xiao_peng_ren_shi_jian==1)
 		{
 			g_peng_ren_shi_chang=30;
 			g_xiao_peng_ren_shi_jian=2;
+			g_peng_ren_chang_duan_shi_jian=0;
 		}
 		else if(g_xiao_peng_ren_shi_jian==2)
 		{
 			g_peng_ren_shi_chang=35;
 			g_xiao_peng_ren_shi_jian=0;
+			g_peng_ren_chang_duan_shi_jian=1;	
 		}
 	}
 	else if(g_work_mode==ZHA_LIANG)
@@ -1429,16 +1482,19 @@ void xiao_peng_ren_shi_jian()
 		{
 			g_peng_ren_shi_chang=25;
 			g_xiao_peng_ren_shi_jian=1;
+			g_peng_ren_chang_duan_shi_jian=2;
 		}
 		else if(g_xiao_peng_ren_shi_jian==1)
 		{
 			g_peng_ren_shi_chang=15;
 			g_xiao_peng_ren_shi_jian=2;
+			g_peng_ren_chang_duan_shi_jian=0;
 		}
 		else if(g_xiao_peng_ren_shi_jian==2)
 		{
 			g_peng_ren_shi_chang=20;
 			g_xiao_peng_ren_shi_jian=0;
+			g_peng_ren_chang_duan_shi_jian=1;
 		}
 	}
 }
@@ -1457,15 +1513,23 @@ void key_operate()
 			else
 			{
 
-				if(one_times++>20)
+				if(one_times++>100)
 				{
 					if(g_key_code==16 && g_work_mode!=0 && g_work_start==0)
 					{
 						key_plus();
+						if(g_work_mode==DIN_WEN_PENG_REN)
+						{
+							key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();
+						}
 					}
 					else if(g_key_code==15 && g_work_mode!=0 && g_work_start==0)
 					{
 						key_jian();
+						if(g_work_mode==DIN_WEN_PENG_REN)
+						{
+							key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();
+						}
 					}
 					else if(g_key_code==1 && g_work_mode==DIN_WEN_PENG_REN && g_work_start==0)
 					{
@@ -1498,6 +1562,13 @@ void key_operate()
 
 			long_press_counter=0;
 			key_on=1;
+
+			if(g_stop_counter>=240000)
+			{
+				g_stop_counter=0;
+				return;
+			}
+			g_stop_counter=0;
 			if(g_kid_lock==0)
 			{
 				if(g_work_start==0)
@@ -1511,6 +1582,7 @@ void key_operate()
 							g_work_mode=DIN_WEN_PENG_REN;
 							g_peng_ren_shi_chang=g_default_time[g_work_mode];
 							g_yu_yue_shi_jian=0;
+							g_yu_yue_ing=0;
 							g_peng_ren_wen_du=50;
 
 						}
@@ -1527,6 +1599,7 @@ void key_operate()
 							g_seting_wen_du=1;
 						}
 						g_dai_P=0;
+						g_dai_no_P=1;
 						
 					}
 					else if(g_key_code==2)
@@ -1534,155 +1607,192 @@ void key_operate()
 						g_work_mode=DUN_ROU;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_xiao_peng_ren_shi_jian=0;
+						g_peng_ren_chang_duan_shi_jian=1;
 						g_peng_ren_wen_du=165;
 						g_dai_P=1;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==3)
 					{
 						g_work_mode=DUN_TANG;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_xiao_peng_ren_shi_jian=0;
+						g_peng_ren_chang_duan_shi_jian=1;
 						g_peng_ren_wen_du=165;
 						g_dai_P=1;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==4)
 					{
 						g_work_mode=LAO_HUO_MAN_DUN;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_peng_ren_wen_du=100;
 						g_dai_P=0;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==5)
 					{
 						g_work_mode=JIAN_KANG_ZHENG;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_xiao_peng_ren_shi_jian=0;
+						g_peng_ren_chang_duan_shi_jian=1;
 						g_peng_ren_wen_du=165;
 						g_dai_P=1;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==6)
 					{
 						g_work_mode=JIAN_CAO;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_peng_ren_wen_du=165;
 						g_dai_P=1;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==12)
 					{
 						g_work_mode=MI_FAN;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_xiao_peng_ren_shi_jian=0;
+						g_peng_ren_chang_duan_shi_jian=1;
 						g_peng_ren_wen_du=165;
 						g_dai_P=1;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==11)
 					{
 						g_work_mode=DOU_LEI;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_xiao_peng_ren_shi_jian=0;
+						g_peng_ren_chang_duan_shi_jian=1;
 						g_peng_ren_wen_du=165;
 						g_dai_P=1;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==10)
 					{
 						g_work_mode=ZHA_LIANG;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_xiao_peng_ren_shi_jian=0;
+						g_peng_ren_chang_duan_shi_jian=1;
 						g_peng_ren_wen_du=165;
 						g_dai_P=1;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==9)
 					{
 						g_work_mode=YAN_MAI;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_peng_ren_wen_du=165;
 						g_dai_P=0;
+						g_dai_no_P=0;
 					}
 					else if(g_key_code==8)
 					{
 						g_work_mode=JI_DAN;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_peng_ren_wen_du=90;
 						g_dai_P=0;
+						g_dai_no_P=1;
 					}
 					else if(g_key_code==18)
 					{
-						static char index1=0;
-						if(index1==0)
+						
+						if(g_fun_index1==0)
 						{
 							g_work_mode=SUAN_NAO;
 							g_peng_ren_wen_du=40;
 							g_dai_P=0;
+							g_dai_no_P=0;
 						}
-						else if(index1==1)
+						else if(g_fun_index1==1)
 						{
 							g_work_mode=FA_JIAO;
 							g_peng_ren_wen_du=40;
 							g_dai_P=0;
+							g_dai_no_P=0;
 						}
-						else if(index1==2)
+						else if(g_fun_index1==2)
 						{
 							g_work_mode=XIAO_DU;
 							g_peng_ren_wen_du=165;
 							g_dai_P=1;
+							g_dai_no_P=0;
 						}
 						
-						index1++;
-						if(index1==3)
+						g_fun_index1++;
+						if(g_fun_index1==3)
 						{
-							index1=0;
+							g_fun_index1=0;
 						}
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						
 					}
 					else if(g_key_code==19)
 					{
-						static char index2=0;
-						if(index2==0)
+						if(g_fun_index2==0)
 						{
 							g_work_mode=DAN_GAO;
 							g_peng_ren_wen_du=165;
 							g_dai_P=1;
+							g_dai_no_P=0;
 						}
-						else if(index2==1)
+						else if(g_fun_index2==1)
 						{
 							g_work_mode=FENG_PEI;
 							g_peng_ren_wen_du=165;
 							g_dai_P=1;
+							g_dai_no_P=0;
 						}
-						else if(index2==2)
+						else if(g_fun_index2==2)
 						{
 							g_work_mode=JI_YA;
 							g_peng_ren_wen_du=165;
 							g_dai_P=1;
+							g_dai_no_P=0;
 						}
 						
-						index2++;
-						if(index2==3)
+						g_fun_index2++;
+						if(g_fun_index2==3)
 						{
-							index2=0;
+							g_fun_index2=0;
 						}
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 					}
 					else if(g_work_mode==0 && g_key_code==7)
 					{
 						g_work_mode=BAO_WEN;
 						g_peng_ren_shi_chang=g_default_time[g_work_mode];
 						g_yu_yue_shi_jian=0;
+						g_yu_yue_ing=0;
 						g_peng_ren_wen_du=60;
 						g_dai_P=0;
+						g_dai_no_P=0;
+						g_operate_counter=2500;
+						g_working_counter=1500;
 					}
 					else if(g_work_mode!=0 && g_key_code==7)
 					{
@@ -1700,11 +1810,13 @@ void key_operate()
 							g_work_mode!=FA_JIAO &&
 							g_work_mode!=BAO_WEN)
 						{
-							g_yu_yue_shi_jian=30;
+							g_yu_yue_shi_jian=0;
+							g_yu_yue_ing=1;
 						}
 						else 
 						{
 							g_yu_yue_shi_jian=0;
+							g_yu_yue_ing=0;
 						}
 						
 					}
@@ -1769,10 +1881,9 @@ void key_operate()
 	if(g_work_mode!=STOP && g_err_code==0)
 	{
 
-		if(g_operate_counter<1500)
+		if(g_operate_counter<2500)
 		{
-			g_operate_counter++;
-
+			g_operate_counter++;			
 			if(g_operate_counter==1)
 			{
 				show_seting();
@@ -1800,15 +1911,41 @@ void key_operate()
 				show_none();
 				g_shi_jian_liang_dian=0;
 			}
-			else if(g_operate_counter==1498)
+			else if(g_operate_counter==1500)
 			{
 				show_seting();
 			}
+			else if(g_operate_counter==1750)
+			{
+				show_none();
+				g_shi_jian_liang_dian=0;
+			}
+			else if(g_operate_counter==2000)
+			{
+				show_seting();
+				if(g_yu_yue_shi_jian==0 && g_yu_yue_ing==0)
+				{
+					buzzer(2);
+					g_operate_counter=2500;
+				}
+			}
+			else if(g_operate_counter==2250)
+			{
+				show_none();
+				g_shi_jian_liang_dian=0;
+			}
+			else if(g_operate_counter==2496)
+			{
+				show_seting();
+				buzzer(2);
+			}
+			
 			g_working_counter=1500;
 		}
 		else
 		{
 			g_work_start=1;
+			g_yu_yue_ing=0;
 			if(g_working_counter<1500)
 			{
 				g_working_counter++;
@@ -1843,6 +1980,7 @@ void key_operate()
 						{
 							RLY=1;
 							g_hoting=1;	
+							g_RLY_work_time++;
 						}						
 					}
 					else
@@ -1850,6 +1988,47 @@ void key_operate()
 						RLY=0;
 						g_hoting=0;
 						g_P_bao_ya_counter_start=1;
+					}
+
+					if( g_work_mode==DIN_WEN_PENG_REN && g_hoting==1)
+					{
+						static u32 t_hot=0;
+						if(g_P_bao_ya_counter_start==1)
+						{
+							t_hot+=2;
+							if(g_peng_ren_wen_du<70)
+							{
+
+								if(t_hot<10000)
+								{
+
+								}
+								else if(t_hot<20000)
+								{
+									RLY=0;
+								}
+								else
+								{
+									t_hot=0;
+								}
+							}
+							else
+							{
+								if(t_hot<15000)
+								{
+
+								}
+								else if(t_hot<25000)
+								{
+									RLY=0;
+								}
+								else
+								{
+									t_hot=0;
+								}
+							}
+							
+						}
 					}
 					
 				}
@@ -1887,11 +2066,14 @@ void key_operate()
 		RLY=0;
 		g_hoting=0;
 		g_P_bao_ya_counter_start=0;
+		g_yu_yue_ing=0;
+		g_fun_index2=0;
+		g_fun_index1=0;
 	}
 }
 void main()
 {
-	char tt=0;
+	short tt=0;
 /************************************ÏµÍ³³õÊ¼»¯****************************************/
 	CLKSWR = 0x51;						//Ñ¡ÔñÄÚ²¿¸ßÆµRCÎªÏµÍ³Ê±ÖÓ£¬ÄÚ²¿¸ßÆµRC 2·ÖÆµ£¬Fosc=16MHz
 	CLKDIV = 0x01;						//Fosc 1·ÖÆµµÃµ½Fcpu£¬Fcpu=16MHz 
@@ -1903,7 +2085,16 @@ void main()
 	EA = 1;								//Ê¹ÄÜ×ÜÖÐ¶Ï
     C_RLY = PP_OUTPUT;
     C_KG =IN_INPUT;
+   
+    show_all();
     buzzer(2);
+    while(tt++<500)
+    {
+    	Delay_ms(2);
+    	buzzer(0);
+    	display();
+    }
+   
 	while(1)
 	{
 		Delay_ms(2);
@@ -1943,7 +2134,7 @@ void TIMER0_Rpt(void) interrupt TIMER0_VECTOR
 			{
 				if(g_peng_ren_shi_chang>0)
 				{
-					if(g_dai_P==1)
+					if(g_dai_P==1 || g_dai_no_P==1)
 					{
 						if(g_P_bao_ya_counter_start==1)
 						{
