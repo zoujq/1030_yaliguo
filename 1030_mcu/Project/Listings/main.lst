@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   52          #define C_PIN21 P0M3
   53          #define C_PIN22 P0M2
   54          #define C_PIN23 P0M1
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 2   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 2   
 
   55          #define C_PIN24 P0M0
   56          #define C_PIN25 P2M7
@@ -126,7 +126,7 @@ line level    source
  114          xdata char g_mi_fan_led=0;
  115          xdata char g_dou_lei_led=0;
  116          xdata char g_zha_liang_led=0;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 3   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 3   
 
  117          xdata char g_yan_mai_led=0;
  118          xdata char g_ji_dan_led=0;
@@ -190,7 +190,7 @@ line level    source
  176          char g_fun_index1=0;
  177          char g_fun_index2=0;
  178          void Delay_1us(unsigned int n)     
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 4   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 4   
 
  179          {
  180   1        unsigned char i;
@@ -254,7 +254,7 @@ line level    source
  237   2          PWM3_MAP = 0x35;          //PWM3映射P03口
  238   2          PWM3P = 0x20;           //PWM周期为0xFF
  239   2          PWM3D = 0x10;           //PWM占空比设置
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 5   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 5   
 
  240   2        }
  241   1      
@@ -318,7 +318,7 @@ line level    source
  299   4              {
  300   5                PWM3C = 0x97; 
  301   5                rr=0;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 6   
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 6   
 
  302   5              }
  303   4              
@@ -336,1936 +336,1955 @@ line level    source
  315          /*************************************ADC************************************************/
  316          //0~119℃
  317          u16 code Temp_Table[200]={
- 318          68,72,75,79,83,87,92,96,101,106,111,116,122,127,133,139,146,153,159,167,174,182,190,198,207,215,225,234,24
-             -4,254,264,275,
- 319          286,297,309,321,334,347,360,374,388,402,417,432,447,463,480,497,514,531,549,568,587,606,626,646,666,687,70
-             -8,730,752,775,
- 320          798,821,845,869,893,918,943,968,994,1020,1047,1074,1101,1128,1156,1184,1212,1241,1269,1298,1327,1357,1386,
-             -1416,1446,1476,
- 321          1506,1536,1566,1597,1627,1658,1688,1719,1749,1780,1811,1841,1872,1902,1932,1963,1993,2023,2053,2082,2112,2
-             -142,2171,2200,
- 322          2229,2258,2286,2314,2343,2370,2398,2425,2452,2479,2506,2532,2558,2584,2609,2635,2659,2684,2708,2732,2756,2
-             -779,2802,2825,
- 323          2847,2869,2891,2912,2934,2954,2975,2995,3015,3034,3054,3073,3091,3110,3128,3145,3163,3180,3197,3213,3230,3
-             -246,3261,3277,
- 324          3292,3307,3321,3336,3350,3364,3377,3390,3404,3416,3429,3441,3453,3465,3477,3488,3500,3511,3521,3532,3542,3
-             -553,3563,3572,
- 325          3582,3591,3601,3610,3619,3627,3636,3644,3652,3660,3668,3676,3684,3691,3698,3705
- 326          };
- 327          
- 328          void init_ntc_adc()
- 329          {
- 330   1        
- 331   1        P2M5 = 0x02;                //
- 332   1        ADCC0 = 0x80;           //
- 333   1        Delay_50us(1);            //
- 334   1        ADCC1 = 0x0D;           //
- 335   1        ADCC2 = 0x4B;           //  
- 336   1      }
- 337          unsigned int get_ntc_adc()
- 338          {
- 339   1        ADCC0 |= 0x40;          //
- 340   1        while(!(ADCC0&0x20));     //
- 341   1        ADCC0 &=~ 0x20;         //
- 342   1        return ADCR;
- 343   1      }
- 344          
- 345          
- 346          void get_temp()
- 347          {
- 348   1        u16 n=0;
- 349   1        u16 ntc_adc=get_ntc_adc();
- 350   1        
- 351   1        for(n=0;n<200;n++)
- 352   1        {
- 353   2          if(Temp_Table[n]>ntc_adc)
- 354   2          {
- 355   3            break;
- 356   3          }
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 7   
+ 318          66,69,73,77,81,85,89,94,98,103,108,114,119,125,131,137,144,150,158,165,173,180,189,197,206,215,
+ 319          225,234,244,254,264,275,286,298,310,322,334,347,361,374,388,402,417,432,448,464,480,497,514,532,
+ 320          549,568,587,606,625,645,666,687,708,730,752,774,797,820,844,868,892,917,942,967,993,1019,1046,1073,
+ 321          3394,1127,1155,1183,1211,1239,1268,1297,1326,1355,1385,1414,1444,1474,1504,1535,1565,1596,1626,1657,
+ 322          1688,1718,1749,1779,1810,1841,1871,1901,1932,1962,1992,2022,2051,2081,2110,2139,2168,2197,2226,2254,
+ 323          2282,2310,2337,2381,2392,2419,2445,2471,2497,2523,2548,2573,2598,2622,2646,2670,2693,2716,2739,2762,
+ 324          2784,2806,2828,2849,2870,2891,2911,2931,2951,2971,2990,3009,3028,3046,3064,3082,3099,3116,3133,3150,
+ 325          3167,3183,3199,3214,3230,3245,3260,3275,3289,3303,3317,3331,3345,3358,3371,3384,3396,3409,3421,3433,
+ 326          3445,3456,3468,3479,3490,3501,3511,3522,3532,3542,3549,3561,3571,3580,3589,3598,3607,3615,3624,3632,
+ 327          3640,3648,3656,3663,3671,3678
+ 328          };
+ 329          
+ 330          void init_ntc_adc()
+ 331          {
+ 332   1        
+ 333   1        P2M5 = 0x02;                //
+ 334   1        ADCC0 = 0x80;           //
+ 335   1        Delay_50us(1);            //
+ 336   1        ADCC1 = 0x0D;           //
+ 337   1        ADCC2 = 0x4B;           //  
+ 338   1      }
+ 339          unsigned int get_ntc_adc()
+ 340          {
+ 341   1        ADCC0 |= 0x40;          //
+ 342   1        while(!(ADCC0&0x20));     //
+ 343   1        ADCC0 &=~ 0x20;         //
+ 344   1        return ADCR;
+ 345   1      }
+ 346          
+ 347          
+ 348          void get_temp()
+ 349          {
+ 350   1        u16 n=0;
+ 351   1        u16 ntc_adc=get_ntc_adc();
+ 352   1        
+ 353   1        for(n=0;n<200;n++)
+ 354   1        {
+ 355   2          if(Temp_Table[n]>ntc_adc)
+ 356   2          {
+ 357   3            break;
+ 358   3          }
+ 359   2        }
+ 360   1      
+ 361   1        if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc==0 && g_err_code==0)
+ 362   1        {
+ 363   2          if(g_RLY_work_time>30000)
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 7   
 
- 357   2        }
- 358   1      
- 359   1        if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc==0 && g_err_code==0)
- 360   1        {
- 361   2          if(g_RLY_work_time>30000)
- 362   2          {
- 363   3            Delay_ms(2);
- 364   3            if(get_ntc_adc()==0)
- 365   3            {
- 366   4              g_err_code=1;
- 367   4              buzzer(4);
- 368   4            }
- 369   3          }
- 370   2          
- 371   2        }
- 372   1        else if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc>=4090 && g_err_code==0)
- 373   1        {
- 374   2          Delay_ms(2);
- 375   2          if(get_ntc_adc()>=4090)
- 376   2          {
- 377   3            g_err_code=2;
- 378   3            buzzer(4);
- 379   3          }
- 380   2        }
- 381   1        else if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc>3676 && g_err_code==0)
- 382   1        {
- 383   2          Delay_ms(2);
- 384   2          if(get_ntc_adc()>3676)
- 385   2          {
- 386   3            // g_err_code=3;
- 387   3            buzzer(4);
- 388   3          }
- 389   2        }
- 390   1        g_currnet_temp=n;
- 391   1      
- 392   1      }
- 393          void check_ya_li_kai_guan()
- 394          {
- 395   1        if(g_yu_yue_shi_jian==0 && g_work_start==1 && g_currnet_temp<80 && KG==1 && g_err_code==0)
- 396   1        {
- 397   2          g_err_code=4;
- 398   2          buzzer(4);
- 399   2        }
- 400   1      }
- 401          
- 402          void init_display()
- 403          {
- 404   1        //COM
- 405   1        C_PIN6=OD_OUTPUT;
- 406   1        C_PIN7=OD_OUTPUT;
- 407   1        C_PIN8=OD_OUTPUT;
- 408   1      
- 409   1        C_PIN19=OD_OUTPUT;
- 410   1        C_PIN22=OD_OUTPUT;
- 411   1        C_PIN23=OD_OUTPUT;
- 412   1        C_PIN10=OD_OUTPUT;
- 413   1      
- 414   1        //SEG
- 415   1        C_PIN18=PP_OUTPUT;
- 416   1        C_PIN15=PP_OUTPUT;
- 417   1        C_PIN17=PP_OUTPUT;
- 418   1        C_PIN24=PP_OUTPUT;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 8   
+ 364   2          {
+ 365   3            Delay_ms(2);
+ 366   3            if(get_ntc_adc()==0)
+ 367   3            {
+ 368   4              g_err_code=1;
+ 369   4              buzzer(4);
+ 370   4            }
+ 371   3          }
+ 372   2          
+ 373   2        }
+ 374   1        else if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc>=4090 && g_err_code==0)
+ 375   1        {
+ 376   2          Delay_ms(2);
+ 377   2          if(get_ntc_adc()>=4090)
+ 378   2          {
+ 379   3            g_err_code=2;
+ 380   3            buzzer(4);
+ 381   3          }
+ 382   2        }
+ 383   1        else if(g_yu_yue_shi_jian==0 && g_work_start==1 && ntc_adc>3676 && g_err_code==0)
+ 384   1        {
+ 385   2          Delay_ms(2);
+ 386   2          if(get_ntc_adc()>3676)
+ 387   2          {
+ 388   3            // g_err_code=3;
+ 389   3            buzzer(4);
+ 390   3          }
+ 391   2        }
+ 392   1        g_currnet_temp=n;
+ 393   1      
+ 394   1      }
+ 395          void check_ya_li_kai_guan()
+ 396          {
+ 397   1        if(g_yu_yue_shi_jian==0 && g_work_start==1 && g_currnet_temp<80 && KG==1 && g_err_code==0)
+ 398   1        {
+ 399   2          g_err_code=4;
+ 400   2          buzzer(4);
+ 401   2        }
+ 402   1      }
+ 403          
+ 404          void init_display()
+ 405          {
+ 406   1        //COM
+ 407   1        C_PIN6=OD_OUTPUT;
+ 408   1        C_PIN7=OD_OUTPUT;
+ 409   1        C_PIN8=OD_OUTPUT;
+ 410   1      
+ 411   1        C_PIN19=OD_OUTPUT;
+ 412   1        C_PIN22=OD_OUTPUT;
+ 413   1        C_PIN23=OD_OUTPUT;
+ 414   1        C_PIN10=OD_OUTPUT;
+ 415   1      
+ 416   1        //SEG
+ 417   1        C_PIN18=PP_OUTPUT;
+ 418   1        C_PIN15=PP_OUTPUT;
+ 419   1        C_PIN17=PP_OUTPUT;
+ 420   1        C_PIN24=PP_OUTPUT;
+ 421   1        C_PIN16=PP_OUTPUT;
+ 422   1        C_PIN21=PP_OUTPUT;
+ 423   1        C_PIN25=PP_OUTPUT;
+ 424   1        C_PIN26=PP_OUTPUT;
+ 425   1        C_PIN9=PP_OUTPUT;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 8   
 
- 419   1        C_PIN16=PP_OUTPUT;
- 420   1        C_PIN21=PP_OUTPUT;
- 421   1        C_PIN25=PP_OUTPUT;
- 422   1        C_PIN26=PP_OUTPUT;
- 423   1        C_PIN9=PP_OUTPUT;
- 424   1        C_PIN20=PP_OUTPUT;
- 425   1      
- 426   1          //COM
- 427   1        PIN19=1;  PIN22=1;  PIN23=1;  PIN10=1;
- 428   1        PIN6=1; PIN7=1; PIN8=1; 
- 429   1        //SEG
- 430   1        PIN18=0;  PIN15=0;  PIN17=0;  PIN24=0;  PIN16=0;  PIN21=0;  PIN25=0;
- 431   1        PIN26=0;  PIN9=0;   PIN20=0;
- 432   1      
- 433   1      }
- 434          void display()
- 435          {
- 436   1        static char index=0;
- 437   1        init_display();
- 438   1        //COM
- 439   1        PIN19=1;  PIN22=1;  PIN23=1;  PIN10=1;
- 440   1        PIN6=1; PIN7=1; PIN8=1; 
- 441   1        //SEG
- 442   1        PIN18=0;  PIN15=0;  PIN17=0;  PIN24=0;  PIN16=0;  PIN21=0;  PIN25=0;
- 443   1        PIN26=0;  PIN9=0;   PIN20=0;
- 444   1        if(index<4)
- 445   1        {
- 446   2          switch(g_shu_ma_guan[index])
- 447   2          {
- 448   3      
- 449   3            case 0:
- 450   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 451   3              break;
- 452   3            case 1:
- 453   3              DISPLAY_A=0;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
- 454   3              break;
- 455   3            case 2:
- 456   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=0;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=0;  DISPLAY_G=1;
- 457   3              break;
- 458   3            case 3:
- 459   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=1;
- 460   3              break;
- 461   3            case 4:
- 462   3              DISPLAY_A=0;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=1;
- 463   3              break;
- 464   3            case 5:
- 465   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=1;
- 466   3              break;
- 467   3            case 6:
- 468   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
- 469   3              break;
- 470   3            case 7:
- 471   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
- 472   3              break;
- 473   3            case 8:
- 474   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
- 475   3              break;
- 476   3            case 9:
- 477   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=1;
- 478   3              break;
- 479   3            case 'E':
- 480   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 9   
+ 426   1        C_PIN20=PP_OUTPUT;
+ 427   1      
+ 428   1          //COM
+ 429   1        PIN19=1;  PIN22=1;  PIN23=1;  PIN10=1;
+ 430   1        PIN6=1; PIN7=1; PIN8=1; 
+ 431   1        //SEG
+ 432   1        PIN18=0;  PIN15=0;  PIN17=0;  PIN24=0;  PIN16=0;  PIN21=0;  PIN25=0;
+ 433   1        PIN26=0;  PIN9=0;   PIN20=0;
+ 434   1      
+ 435   1      }
+ 436          void display()
+ 437          {
+ 438   1        static char index=0;
+ 439   1        init_display();
+ 440   1        //COM
+ 441   1        PIN19=1;  PIN22=1;  PIN23=1;  PIN10=1;
+ 442   1        PIN6=1; PIN7=1; PIN8=1; 
+ 443   1        //SEG
+ 444   1        PIN18=0;  PIN15=0;  PIN17=0;  PIN24=0;  PIN16=0;  PIN21=0;  PIN25=0;
+ 445   1        PIN26=0;  PIN9=0;   PIN20=0;
+ 446   1        if(index<4)
+ 447   1        {
+ 448   2          switch(g_shu_ma_guan[index])
+ 449   2          {
+ 450   3      
+ 451   3            case 0:
+ 452   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 453   3              break;
+ 454   3            case 1:
+ 455   3              DISPLAY_A=0;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
+ 456   3              break;
+ 457   3            case 2:
+ 458   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=0;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=0;  DISPLAY_G=1;
+ 459   3              break;
+ 460   3            case 3:
+ 461   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=1;
+ 462   3              break;
+ 463   3            case 4:
+ 464   3              DISPLAY_A=0;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=1;
+ 465   3              break;
+ 466   3            case 5:
+ 467   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=1;
+ 468   3              break;
+ 469   3            case 6:
+ 470   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
+ 471   3              break;
+ 472   3            case 7:
+ 473   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
+ 474   3              break;
+ 475   3            case 8:
+ 476   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
+ 477   3              break;
+ 478   3            case 9:
+ 479   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=1;
+ 480   3              break;
+ 481   3            case 'E':
+ 482   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
+ 483   3              break;
+ 484   3            case '-':
+ 485   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=1;
+ 486   3              break;
+ 487   3            case 'P':
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 9   
 
- 481   3              break;
- 482   3            case '-':
- 483   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=1;
- 484   3              break;
- 485   3            case 'P':
- 486   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
- 487   3              break;
- 488   3            case 'C':
- 489   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 490   3              break;
- 491   3            case 'b':
- 492   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
- 493   3              break;
- 494   3            case 10:
- 495   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
- 496   3              break;
- 497   3            case 11:
- 498   3              DISPLAY_A=0;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
- 499   3              break;
- 500   3            case 12:
- 501   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
- 502   3              break;
- 503   3            case 13:
- 504   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=0;
- 505   3              break;
- 506   3            case 14:
- 507   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 508   3              break;
- 509   3            case 15:
- 510   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 511   3              break;
- 512   3            case 16:
- 513   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=0;  DISPLAY_G=0;
- 514   3              break;
- 515   3            case 17:
- 516   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 517   3              break;
- 518   3            case 18:
- 519   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 520   3              break;
- 521   3            case 19:
- 522   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 523   3              break;
- 524   3            case 20:
- 525   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 526   3              break;
- 527   3            case 21:
- 528   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
- 529   3              break;
- 530   3            default:
- 531   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
- 532   3              break;
- 533   3            
- 534   3          }
- 535   2      
- 536   2          
- 537   2        }
- 538   1        if(index==0)
- 539   1        {
- 540   2          PIN19=0;
- 541   2        }
- 542   1        else if(index==1)
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 10  
+ 488   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
+ 489   3              break;
+ 490   3            case 'C':
+ 491   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 492   3              break;
+ 493   3            case 'b':
+ 494   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=1;
+ 495   3              break;
+ 496   3            case 10:
+ 497   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
+ 498   3              break;
+ 499   3            case 11:
+ 500   3              DISPLAY_A=0;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
+ 501   3              break;
+ 502   3            case 12:
+ 503   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
+ 504   3              break;
+ 505   3            case 13:
+ 506   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=1;  DISPLAY_G=0;
+ 507   3              break;
+ 508   3            case 14:
+ 509   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 510   3              break;
+ 511   3            case 15:
+ 512   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 513   3              break;
+ 514   3            case 16:
+ 515   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=0;  DISPLAY_G=0;
+ 516   3              break;
+ 517   3            case 17:
+ 518   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 519   3              break;
+ 520   3            case 18:
+ 521   3              DISPLAY_A=1;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 522   3              break;
+ 523   3            case 19:
+ 524   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 525   3              break;
+ 526   3            case 20:
+ 527   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=0;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 528   3              break;
+ 529   3            case 21:
+ 530   3              DISPLAY_A=1;  DISPLAY_B=1;  DISPLAY_C=1;  DISPLAY_D=1;  DISPLAY_E=1;  DISPLAY_F=1;  DISPLAY_G=0;
+ 531   3              break;
+ 532   3            default:
+ 533   3              DISPLAY_A=0;  DISPLAY_B=0;  DISPLAY_C=0;  DISPLAY_D=0;  DISPLAY_E=0;  DISPLAY_F=0;  DISPLAY_G=0;
+ 534   3              break;
+ 535   3            
+ 536   3          }
+ 537   2      
+ 538   2          
+ 539   2        }
+ 540   1        if(index==0)
+ 541   1        {
+ 542   2          PIN19=0;
+ 543   2        }
+ 544   1        else if(index==1)
+ 545   1        {
+ 546   2          PIN22=0;
+ 547   2          DISPLAY_DP=g_shi_jian_liang_dian;
+ 548   2        }
+ 549   1        else if(index==2)
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 10  
 
- 543   1        {
- 544   2          PIN22=0;
- 545   2          DISPLAY_DP=g_shi_jian_liang_dian;
- 546   2        }
- 547   1        else if(index==2)
- 548   1        {
- 549   2          PIN23=0;
- 550   2        }
- 551   1        else if(index==3)
- 552   1        {
- 553   2          PIN10=0;
- 554   2        }
- 555   1        else if(index==4)
- 556   1        {
- 557   2          PIN18=g_dun_tang_led; PIN15=g_ji_ya_led;  PIN17=g_jian_cao_led; PIN24=g_bao_wen_led;  PIN16=g_chang_duan_l
+ 550   1        {
+ 551   2          PIN23=0;
+ 552   2        }
+ 553   1        else if(index==3)
+ 554   1        {
+ 555   2          PIN10=0;
+ 556   2        }
+ 557   1        else if(index==4)
+ 558   1        {
+ 559   2          PIN18=g_dun_tang_led; PIN15=g_ji_ya_led;  PIN17=g_jian_cao_led; PIN24=g_bao_wen_led;  PIN16=g_chang_duan_l
              -ed[1];  
- 558   2          PIN21=g_yan_mai_led;  PIN25=g_mi_fan_led;   PIN26=g_dou_lei_led;  PIN9=g_chang_duan_led[1]; PIN20=g_din_wen
+ 560   2          PIN21=g_yan_mai_led;  PIN25=g_mi_fan_led;   PIN26=g_dou_lei_led;  PIN9=g_chang_duan_led[1]; PIN20=g_din_wen
              -_peng_ren_led;
- 559   2          
- 560   2          PIN6=0;
- 561   2        }
- 562   1        else if(index==5)
- 563   1        {
- 564   2          PIN18=g_lao_huo_man_dun_led;  PIN15=g_chang_duan_led[0];  PIN17=g_jian_kang_zheng_led;  PIN24=g_dan_gao_led
+ 561   2          
+ 562   2          PIN6=0;
+ 563   2        }
+ 564   1        else if(index==5)
+ 565   1        {
+ 566   2          PIN18=g_lao_huo_man_dun_led;  PIN15=g_chang_duan_led[0];  PIN17=g_jian_kang_zheng_led;  PIN24=g_dan_gao_led
              -;  PIN16=g_fa_jiao_led; 
- 565   2          PIN21=g_ji_dan_led; PIN25=1;    PIN26=g_zha_liang_led;  PIN9=g_chang_duan_led[1]; PIN20=g_L_led;
- 566   2          
- 567   2          PIN7=0;
- 568   2        }
- 569   1        else if(index==6)
- 570   1        {
- 571   2          PIN18=g_P_led;  PIN15=g_chang_duan_led[0];  PIN17=g_suan_nao_led; PIN24=g_feng_pei_led; PIN16=g_xiao_du_le
+ 567   2          PIN21=g_ji_dan_led; PIN25=1;    PIN26=g_zha_liang_led;  PIN9=g_chang_duan_led[1]; PIN20=g_L_led;
+ 568   2          
+ 569   2          PIN7=0;
+ 570   2        }
+ 571   1        else if(index==6)
+ 572   1        {
+ 573   2          PIN18=g_P_led;  PIN15=g_chang_duan_led[0];  PIN17=g_suan_nao_led; PIN24=g_feng_pei_led; PIN16=g_xiao_du_le
              -d;  
- 572   2          PIN21=g_chang_duan_led[2];  PIN25=0;    PIN26=g_chang_duan_led[2];  PIN9=g_chang_duan_led[2]; PIN20=g_dun_ro
+ 574   2          PIN21=g_chang_duan_led[2];  PIN25=0;    PIN26=g_chang_duan_led[2];  PIN9=g_chang_duan_led[2]; PIN20=g_dun_ro
              -u_led;
- 573   2          PIN8=0;
- 574   2        }
- 575   1        else
- 576   1        {
- 577   2      
- 578   2        }
- 579   1      
- 580   1        index++;
- 581   1        if(index==7)
- 582   1        {
- 583   2          index=0;
- 584   2        }
- 585   1      
- 586   1      }
- 587          
- 588          void show_shu_ma_guan_seting()
- 589          {
- 590   1        if(g_seting_wen_du==0)
- 591   1        {
- 592   2          if(g_work_mode!=BAO_WEN)
- 593   2          {
- 594   3            if(g_dai_P==0)
- 595   3            {
- 596   4              g_shu_ma_guan[0]=g_peng_ren_shi_chang/600;
- 597   4              g_shu_ma_guan[1]=(g_peng_ren_shi_chang%600)/60;
- 598   4              g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
- 599   4              g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 11  
+ 575   2          PIN8=0;
+ 576   2        }
+ 577   1        else
+ 578   1        {
+ 579   2      
+ 580   2        }
+ 581   1      
+ 582   1        index++;
+ 583   1        if(index==7)
+ 584   1        {
+ 585   2          index=0;
+ 586   2        }
+ 587   1      
+ 588   1      }
+ 589          
+ 590          void show_shu_ma_guan_seting()
+ 591          {
+ 592   1        if(g_seting_wen_du==0)
+ 593   1        {
+ 594   2          if(g_work_mode!=BAO_WEN)
+ 595   2          {
+ 596   3            if(g_dai_P==0)
+ 597   3            {
+ 598   4              g_shu_ma_guan[0]=g_peng_ren_shi_chang/600;
+ 599   4              g_shu_ma_guan[1]=(g_peng_ren_shi_chang%600)/60;
+ 600   4              g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
+ 601   4              g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;
+ 602   4              g_shi_jian_liang_dian=1;
+ 603   4            }
+ 604   3            else
+ 605   3            {
+ 606   4              g_shu_ma_guan[0]='X';
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 11  
 
- 600   4              g_shi_jian_liang_dian=1;
- 601   4            }
- 602   3            else
- 603   3            {
- 604   4              g_shu_ma_guan[0]='X';
- 605   4              g_shu_ma_guan[1]='P';
- 606   4              g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
- 607   4              g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;
- 608   4              g_shi_jian_liang_dian=0;
- 609   4            }
- 610   3            
- 611   3            if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
- 612   3            {
- 613   4              g_shu_ma_guan[0]=g_yu_yue_shi_jian/600;
- 614   4              g_shu_ma_guan[1]=(g_yu_yue_shi_jian%600)/60;
- 615   4              g_shu_ma_guan[2]=(g_yu_yue_shi_jian%60)/10;
- 616   4              g_shu_ma_guan[3]=g_yu_yue_shi_jian%10;
- 617   4              g_shi_jian_liang_dian=1;
- 618   4            }
- 619   3            
- 620   3          }
- 621   2          else{
- 622   3      
- 623   3            g_shu_ma_guan[0]='X';
- 624   3            g_shu_ma_guan[1]='X';
- 625   3            g_shu_ma_guan[2]='b';
- 626   3            g_shu_ma_guan[3]='b';
- 627   3          }
- 628   2        }
- 629   1        else
- 630   1        {
- 631   2          g_shu_ma_guan[0]='X';
- 632   2          g_shu_ma_guan[1]=g_peng_ren_wen_du/10;
- 633   2          g_shu_ma_guan[2]=g_peng_ren_wen_du%10;
- 634   2          g_shu_ma_guan[3]='C';
- 635   2          g_shi_jian_liang_dian=0;
- 636   2          
- 637   2        }
- 638   1      
- 639   1        
- 640   1      }
- 641          void show_shu_ma_guan_working()
- 642          {
- 643   1        static short t1=0;
- 644   1        if(g_work_mode!=BAO_WEN)
- 645   1        {
- 646   2          if(g_dai_P==0 || g_yu_yue_shi_jian>0)
- 647   2          {
- 648   3            g_shu_ma_guan[0]=g_peng_ren_shi_chang/600;
- 649   3            g_shu_ma_guan[1]=(g_peng_ren_shi_chang%600)/60;
- 650   3            g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
- 651   3            g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;   
- 652   3            if(g_yu_yue_shi_jian>0)
- 653   3            {
- 654   4              g_shu_ma_guan[0]=g_yu_yue_shi_jian/600;
- 655   4              g_shu_ma_guan[1]=(g_yu_yue_shi_jian%600)/60;
- 656   4              g_shu_ma_guan[2]=(g_yu_yue_shi_jian%60)/10;
- 657   4              g_shu_ma_guan[3]=g_yu_yue_shi_jian%10;
- 658   4              
- 659   4            }
- 660   3              
- 661   3            if(t1==1)
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 12  
+ 607   4              g_shu_ma_guan[1]='P';
+ 608   4              g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
+ 609   4              g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;
+ 610   4              g_shi_jian_liang_dian=0;
+ 611   4            }
+ 612   3            
+ 613   3            if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
+ 614   3            {
+ 615   4              g_shu_ma_guan[0]=g_yu_yue_shi_jian/600;
+ 616   4              g_shu_ma_guan[1]=(g_yu_yue_shi_jian%600)/60;
+ 617   4              g_shu_ma_guan[2]=(g_yu_yue_shi_jian%60)/10;
+ 618   4              g_shu_ma_guan[3]=g_yu_yue_shi_jian%10;
+ 619   4              g_shi_jian_liang_dian=1;
+ 620   4            }
+ 621   3            
+ 622   3          }
+ 623   2          else{
+ 624   3      
+ 625   3            g_shu_ma_guan[0]='X';
+ 626   3            g_shu_ma_guan[1]='X';
+ 627   3            g_shu_ma_guan[2]='b';
+ 628   3            g_shu_ma_guan[3]='b';
+ 629   3          }
+ 630   2        }
+ 631   1        else
+ 632   1        {
+ 633   2          g_shu_ma_guan[0]='X';
+ 634   2          g_shu_ma_guan[1]=g_peng_ren_wen_du/10;
+ 635   2          g_shu_ma_guan[2]=g_peng_ren_wen_du%10;
+ 636   2          g_shu_ma_guan[3]='C';
+ 637   2          g_shi_jian_liang_dian=0;
+ 638   2          
+ 639   2        }
+ 640   1      
+ 641   1        
+ 642   1      }
+ 643          void show_shu_ma_guan_working()
+ 644          {
+ 645   1        static short t1=0;
+ 646   1        if(g_work_mode!=BAO_WEN)
+ 647   1        {
+ 648   2          if(g_dai_P==0 || g_yu_yue_shi_jian>0)
+ 649   2          {
+ 650   3            g_shu_ma_guan[0]=g_peng_ren_shi_chang/600;
+ 651   3            g_shu_ma_guan[1]=(g_peng_ren_shi_chang%600)/60;
+ 652   3            g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
+ 653   3            g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;   
+ 654   3            if(g_yu_yue_shi_jian>0)
+ 655   3            {
+ 656   4              g_shu_ma_guan[0]=g_yu_yue_shi_jian/600;
+ 657   4              g_shu_ma_guan[1]=(g_yu_yue_shi_jian%600)/60;
+ 658   4              g_shu_ma_guan[2]=(g_yu_yue_shi_jian%60)/10;
+ 659   4              g_shu_ma_guan[3]=g_yu_yue_shi_jian%10;
+ 660   4              
+ 661   4            }
+ 662   3              
+ 663   3            if(t1==1)
+ 664   3            {
+ 665   4              g_shi_jian_liang_dian=1;
+ 666   4            }
+ 667   3            else if(t1==250)
+ 668   3            {
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 12  
 
- 662   3            {
- 663   4              g_shi_jian_liang_dian=1;
- 664   4            }
- 665   3            else if(t1==250)
- 666   3            {
- 667   4              g_shi_jian_liang_dian=0;
- 668   4            }
- 669   3            else if(t1>500)
- 670   3            {
- 671   4              t1=0;
- 672   4            } 
- 673   3            t1++;       
- 674   3      
- 675   3            if(g_dai_no_P==1 && g_P_bao_ya_counter_start==0)
- 676   3            {
- 677   4              g_shi_jian_liang_dian=1;
- 678   4            } 
- 679   3      
- 680   3          }
- 681   2          else
- 682   2          {
- 683   3            
- 684   3            g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
- 685   3            g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;
- 686   3            if(g_hoting==1)
- 687   3            {
- 688   4              g_shi_jian_liang_dian=0;
- 689   4              if(t1==1)
- 690   4              {
- 691   5                g_shu_ma_guan[0]=10;
- 692   5                g_shu_ma_guan[1]=16;
- 693   5              }
- 694   4              else if(t1==200)
- 695   4              {
- 696   5                g_shu_ma_guan[0]=11;
- 697   5                g_shu_ma_guan[1]=17;
- 698   5              }
- 699   4              else if(t1==400)
- 700   4              {
- 701   5                g_shu_ma_guan[0]=12;
- 702   5                g_shu_ma_guan[1]=18;
- 703   5              }
- 704   4              else if(t1==600)
- 705   4              {
- 706   5                g_shu_ma_guan[0]=13;
- 707   5                g_shu_ma_guan[1]=19;
- 708   5              }
- 709   4              else if(t1==800)
- 710   4              {
- 711   5                g_shu_ma_guan[0]=14;
- 712   5                g_shu_ma_guan[1]=20;
- 713   5              }
- 714   4              else if(t1==1000)
- 715   4              {
- 716   5                g_shu_ma_guan[0]=15;
- 717   5                g_shu_ma_guan[1]=21;
- 718   5              }
- 719   4              else if(t1>1200)
- 720   4              {
- 721   5                t1=0;
- 722   5              }
- 723   4          
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 13  
+ 669   4              g_shi_jian_liang_dian=0;
+ 670   4            }
+ 671   3            else if(t1>500)
+ 672   3            {
+ 673   4              t1=0;
+ 674   4            } 
+ 675   3            t1++;       
+ 676   3      
+ 677   3            if(g_dai_no_P==1 && g_P_bao_ya_counter_start==0)
+ 678   3            {
+ 679   4              g_shi_jian_liang_dian=1;
+ 680   4            } 
+ 681   3      
+ 682   3          }
+ 683   2          else
+ 684   2          {
+ 685   3            
+ 686   3            g_shu_ma_guan[2]=(g_peng_ren_shi_chang%60)/10;
+ 687   3            g_shu_ma_guan[3]=g_peng_ren_shi_chang%10;
+ 688   3            if(g_hoting==1)
+ 689   3            {
+ 690   4              g_shi_jian_liang_dian=0;
+ 691   4              if(t1==1)
+ 692   4              {
+ 693   5                g_shu_ma_guan[0]=10;
+ 694   5                g_shu_ma_guan[1]=16;
+ 695   5              }
+ 696   4              else if(t1==200)
+ 697   4              {
+ 698   5                g_shu_ma_guan[0]=11;
+ 699   5                g_shu_ma_guan[1]=17;
+ 700   5              }
+ 701   4              else if(t1==400)
+ 702   4              {
+ 703   5                g_shu_ma_guan[0]=12;
+ 704   5                g_shu_ma_guan[1]=18;
+ 705   5              }
+ 706   4              else if(t1==600)
+ 707   4              {
+ 708   5                g_shu_ma_guan[0]=13;
+ 709   5                g_shu_ma_guan[1]=19;
+ 710   5              }
+ 711   4              else if(t1==800)
+ 712   4              {
+ 713   5                g_shu_ma_guan[0]=14;
+ 714   5                g_shu_ma_guan[1]=20;
+ 715   5              }
+ 716   4              else if(t1==1000)
+ 717   4              {
+ 718   5                g_shu_ma_guan[0]=15;
+ 719   5                g_shu_ma_guan[1]=21;
+ 720   5              }
+ 721   4              else if(t1>1200)
+ 722   4              {
+ 723   5                t1=0;
+ 724   5              }
+ 725   4          
+ 726   4              t1++;
+ 727   4            }
+ 728   3            else
+ 729   3            {
+ 730   4              g_shu_ma_guan[0]='X';
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 13  
 
- 724   4              t1++;
- 725   4            }
- 726   3            else
- 727   3            {
- 728   4              g_shu_ma_guan[0]='X';
- 729   4              g_shu_ma_guan[1]='P';
- 730   4              if(t1==1)
- 731   4              {
- 732   5                g_shi_jian_liang_dian=1;
- 733   5              }
- 734   4              else if(t1==250)
- 735   4              {
- 736   5                g_shi_jian_liang_dian=0;
- 737   5              }
- 738   4              else if(t1>500)
- 739   4              {
- 740   5                t1=0;
- 741   5              } 
- 742   4              t1++;
- 743   4            }
- 744   3          }   
- 745   2          
- 746   2        }
- 747   1        else{
- 748   2      
- 749   2          g_shu_ma_guan[0]='X';
- 750   2          g_shu_ma_guan[1]='X';
- 751   2          g_shu_ma_guan[2]='b';
- 752   2          g_shu_ma_guan[3]='b';
- 753   2          g_shi_jian_liang_dian=0;
- 754   2        }
- 755   1          
- 756   1      }
- 757          
- 758          void show_none()
- 759          {
- 760   1        g_din_wen_peng_ren_led=0;
- 761   1        g_dun_rou_led=0;
- 762   1        g_dun_tang_led=0;
- 763   1        g_lao_huo_man_dun_led=0;
- 764   1        g_jian_kang_zheng_led=0;
- 765   1        g_jian_cao_led=0;
- 766   1        g_suan_nao_led=0;
- 767   1        g_fa_jiao_led=0;
- 768   1        g_xiao_du_led=0;
- 769   1        g_dan_gao_led=0;
- 770   1        g_feng_pei_led=0;
- 771   1        g_ji_ya_led=0;
- 772   1        g_mi_fan_led=0;
- 773   1        g_dou_lei_led=0;
- 774   1        g_zha_liang_led=0;
- 775   1        g_yan_mai_led=0;
- 776   1        g_ji_dan_led=0;
- 777   1        g_bao_wen_led=0;
- 778   1        g_chang_duan_led[0]=0;
- 779   1        g_chang_duan_led[1]=0;
- 780   1        g_chang_duan_led[2]=0;
- 781   1        if(g_work_start==0)
- 782   1        {
- 783   2          g_shu_ma_guan[0]='X';
- 784   2          g_shu_ma_guan[1]='X';
- 785   2          g_shu_ma_guan[2]='X';
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 14  
+ 731   4              g_shu_ma_guan[1]='P';
+ 732   4              if(t1==1)
+ 733   4              {
+ 734   5                g_shi_jian_liang_dian=1;
+ 735   5              }
+ 736   4              else if(t1==250)
+ 737   4              {
+ 738   5                g_shi_jian_liang_dian=0;
+ 739   5              }
+ 740   4              else if(t1>500)
+ 741   4              {
+ 742   5                t1=0;
+ 743   5              } 
+ 744   4              t1++;
+ 745   4            }
+ 746   3          }   
+ 747   2          
+ 748   2        }
+ 749   1        else{
+ 750   2      
+ 751   2          g_shu_ma_guan[0]='X';
+ 752   2          g_shu_ma_guan[1]='X';
+ 753   2          g_shu_ma_guan[2]='b';
+ 754   2          g_shu_ma_guan[3]='b';
+ 755   2          g_shi_jian_liang_dian=0;
+ 756   2        }
+ 757   1          
+ 758   1      }
+ 759          
+ 760          void show_none()
+ 761          {
+ 762   1        g_din_wen_peng_ren_led=0;
+ 763   1        g_dun_rou_led=0;
+ 764   1        g_dun_tang_led=0;
+ 765   1        g_lao_huo_man_dun_led=0;
+ 766   1        g_jian_kang_zheng_led=0;
+ 767   1        g_jian_cao_led=0;
+ 768   1        g_suan_nao_led=0;
+ 769   1        g_fa_jiao_led=0;
+ 770   1        g_xiao_du_led=0;
+ 771   1        g_dan_gao_led=0;
+ 772   1        g_feng_pei_led=0;
+ 773   1        g_ji_ya_led=0;
+ 774   1        g_mi_fan_led=0;
+ 775   1        g_dou_lei_led=0;
+ 776   1        g_zha_liang_led=0;
+ 777   1        g_yan_mai_led=0;
+ 778   1        g_ji_dan_led=0;
+ 779   1        g_bao_wen_led=0;
+ 780   1        g_chang_duan_led[0]=0;
+ 781   1        g_chang_duan_led[1]=0;
+ 782   1        g_chang_duan_led[2]=0;
+ 783   1        if(g_work_start==0)
+ 784   1        {
+ 785   2          g_shu_ma_guan[0]='X';
+ 786   2          g_shu_ma_guan[1]='X';
+ 787   2          g_shu_ma_guan[2]='X';
+ 788   2          g_shu_ma_guan[3]='X';
+ 789   2      
+ 790   2        }
+ 791   1        
+ 792   1        g_L_led=0;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 14  
 
- 786   2          g_shu_ma_guan[3]='X';
- 787   2      
- 788   2        }
- 789   1        
- 790   1        g_L_led=0;
- 791   1        g_P_led=0;
- 792   1      
- 793   1      }
- 794          void show_all()
- 795          {
- 796   1        g_din_wen_peng_ren_led=1;
- 797   1        g_dun_rou_led=1;
- 798   1        g_dun_tang_led=1;
- 799   1        g_lao_huo_man_dun_led=1;
- 800   1        g_jian_kang_zheng_led=1;
- 801   1        g_jian_cao_led=1;
- 802   1        g_suan_nao_led=1;
- 803   1        g_fa_jiao_led=1;
- 804   1        g_xiao_du_led=1;
- 805   1        g_dan_gao_led=1;
- 806   1        g_feng_pei_led=1;
- 807   1        g_ji_ya_led=1;
- 808   1        g_mi_fan_led=1;
- 809   1        g_dou_lei_led=1;
- 810   1        g_zha_liang_led=1;
- 811   1        g_yan_mai_led=1;
- 812   1        g_ji_dan_led=1;
- 813   1        g_bao_wen_led=1;
- 814   1        g_chang_duan_led[0]=1;
- 815   1        g_chang_duan_led[1]=1;
- 816   1        g_chang_duan_led[2]=1;
- 817   1      
- 818   1        g_shu_ma_guan[0]=8;
- 819   1        g_shu_ma_guan[1]=8;
- 820   1        g_shu_ma_guan[2]=8;
- 821   1        g_shu_ma_guan[3]=8;
- 822   1        
- 823   1        g_L_led=1;
- 824   1        g_P_led=1;
- 825   1      
- 826   1      }
- 827          void show_stop()
- 828          {
- 829   1        show_none();
- 830   1        g_shu_ma_guan[0]=0;
- 831   1        g_shu_ma_guan[1]=0;
- 832   1        g_shu_ma_guan[2]=0;
- 833   1        g_shu_ma_guan[3]=0;
- 834   1        g_shi_jian_liang_dian=0;
- 835   1        if(g_kid_lock==1)
- 836   1        {
- 837   2          g_L_led=1;
- 838   2        }
- 839   1        if(g_err_code!=0)
- 840   1        {
- 841   2          g_shu_ma_guan[0]='X';
- 842   2          g_shu_ma_guan[1]='X';
- 843   2          g_shu_ma_guan[2]='E';
- 844   2          g_shu_ma_guan[3]=g_err_code;
- 845   2        }
- 846   1        if(g_stop_counter>240000)
- 847   1        {
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 15  
+ 793   1        g_P_led=0;
+ 794   1      
+ 795   1      }
+ 796          void show_all()
+ 797          {
+ 798   1        g_din_wen_peng_ren_led=1;
+ 799   1        g_dun_rou_led=1;
+ 800   1        g_dun_tang_led=1;
+ 801   1        g_lao_huo_man_dun_led=1;
+ 802   1        g_jian_kang_zheng_led=1;
+ 803   1        g_jian_cao_led=1;
+ 804   1        g_suan_nao_led=1;
+ 805   1        g_fa_jiao_led=1;
+ 806   1        g_xiao_du_led=1;
+ 807   1        g_dan_gao_led=1;
+ 808   1        g_feng_pei_led=1;
+ 809   1        g_ji_ya_led=1;
+ 810   1        g_mi_fan_led=1;
+ 811   1        g_dou_lei_led=1;
+ 812   1        g_zha_liang_led=1;
+ 813   1        g_yan_mai_led=1;
+ 814   1        g_ji_dan_led=1;
+ 815   1        g_bao_wen_led=1;
+ 816   1        g_chang_duan_led[0]=1;
+ 817   1        g_chang_duan_led[1]=1;
+ 818   1        g_chang_duan_led[2]=1;
+ 819   1      
+ 820   1        g_shu_ma_guan[0]=8;
+ 821   1        g_shu_ma_guan[1]=8;
+ 822   1        g_shu_ma_guan[2]=8;
+ 823   1        g_shu_ma_guan[3]=8;
+ 824   1        
+ 825   1        g_L_led=1;
+ 826   1        g_P_led=1;
+ 827   1      
+ 828   1      }
+ 829          void show_stop()
+ 830          {
+ 831   1        show_none();
+ 832   1        g_shu_ma_guan[0]=0;
+ 833   1        g_shu_ma_guan[1]=0;
+ 834   1        g_shu_ma_guan[2]=0;
+ 835   1        g_shu_ma_guan[3]=0;
+ 836   1        g_shi_jian_liang_dian=0;
+ 837   1        if(g_kid_lock==1)
+ 838   1        {
+ 839   2          g_L_led=1;
+ 840   2        }
+ 841   1        if(g_err_code!=0)
+ 842   1        {
+ 843   2          g_shu_ma_guan[0]='X';
+ 844   2          g_shu_ma_guan[1]='X';
+ 845   2          g_shu_ma_guan[2]='E';
+ 846   2          g_shu_ma_guan[3]=g_err_code;
+ 847   2        }
+ 848   1        if(g_stop_counter>240000)
+ 849   1        {
+ 850   2          g_shu_ma_guan[0]='X';
+ 851   2          g_shu_ma_guan[1]='X';
+ 852   2          g_shu_ma_guan[2]='X';
+ 853   2          g_shu_ma_guan[3]='X';
+ 854   2        }
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 15  
 
- 848   2          g_shu_ma_guan[0]='X';
- 849   2          g_shu_ma_guan[1]='X';
- 850   2          g_shu_ma_guan[2]='X';
- 851   2          g_shu_ma_guan[3]='X';
- 852   2        }
- 853   1        else
- 854   1        {
- 855   2          g_stop_counter+=2;
- 856   2        }
- 857   1      
- 858   1      }
- 859          void show_chang_duan()
- 860          {
- 861   1      
- 862   1        if(g_peng_ren_chang_duan_shi_jian==0){
- 863   2          g_chang_duan_led[0]=1;
- 864   2          g_chang_duan_led[1]=0;
- 865   2          g_chang_duan_led[2]=0;
- 866   2        }
- 867   1        else if(g_peng_ren_chang_duan_shi_jian==1){
- 868   2          g_chang_duan_led[0]=1;
- 869   2          g_chang_duan_led[1]=1;
- 870   2          g_chang_duan_led[2]=0;
- 871   2        }
- 872   1        else if(g_peng_ren_chang_duan_shi_jian==2){
- 873   2          g_chang_duan_led[0]=1;
- 874   2          g_chang_duan_led[1]=1;
- 875   2          g_chang_duan_led[2]=1;
- 876   2        }
- 877   1      
- 878   1      }
- 879          void show_led()
- 880          {
- 881   1        switch(g_work_mode)
- 882   1        {
- 883   2          case DIN_WEN_PENG_REN:
- 884   2            g_din_wen_peng_ren_led=1;
- 885   2          break;
- 886   2          case DUN_ROU:
- 887   2            g_dun_rou_led=1;
- 888   2            show_chang_duan();
- 889   2          break;    
- 890   2          case DUN_TANG:
- 891   2            g_dun_tang_led=1; 
- 892   2            show_chang_duan();
- 893   2          break;
- 894   2          case LAO_HUO_MAN_DUN:
- 895   2            g_lao_huo_man_dun_led=1;
- 896   2          break;
- 897   2          case JIAN_KANG_ZHENG:
- 898   2            g_jian_kang_zheng_led=1;
- 899   2            show_chang_duan();
- 900   2          break;
- 901   2          case JIAN_CAO:
- 902   2            g_jian_cao_led=1;
- 903   2          break;
- 904   2          case MI_FAN:
- 905   2            g_mi_fan_led=1;
- 906   2            show_chang_duan();
- 907   2          break;
- 908   2          case DOU_LEI:
- 909   2            g_dou_lei_led=1;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 16  
+ 855   1        else
+ 856   1        {
+ 857   2          g_stop_counter+=2;
+ 858   2        }
+ 859   1      
+ 860   1      }
+ 861          void show_chang_duan()
+ 862          {
+ 863   1      
+ 864   1        if(g_peng_ren_chang_duan_shi_jian==0){
+ 865   2          g_chang_duan_led[0]=1;
+ 866   2          g_chang_duan_led[1]=0;
+ 867   2          g_chang_duan_led[2]=0;
+ 868   2        }
+ 869   1        else if(g_peng_ren_chang_duan_shi_jian==1){
+ 870   2          g_chang_duan_led[0]=1;
+ 871   2          g_chang_duan_led[1]=1;
+ 872   2          g_chang_duan_led[2]=0;
+ 873   2        }
+ 874   1        else if(g_peng_ren_chang_duan_shi_jian==2){
+ 875   2          g_chang_duan_led[0]=1;
+ 876   2          g_chang_duan_led[1]=1;
+ 877   2          g_chang_duan_led[2]=1;
+ 878   2        }
+ 879   1      
+ 880   1      }
+ 881          void show_led()
+ 882          {
+ 883   1        switch(g_work_mode)
+ 884   1        {
+ 885   2          case DIN_WEN_PENG_REN:
+ 886   2            g_din_wen_peng_ren_led=1;
+ 887   2          break;
+ 888   2          case DUN_ROU:
+ 889   2            g_dun_rou_led=1;
+ 890   2            show_chang_duan();
+ 891   2          break;    
+ 892   2          case DUN_TANG:
+ 893   2            g_dun_tang_led=1; 
+ 894   2            show_chang_duan();
+ 895   2          break;
+ 896   2          case LAO_HUO_MAN_DUN:
+ 897   2            g_lao_huo_man_dun_led=1;
+ 898   2          break;
+ 899   2          case JIAN_KANG_ZHENG:
+ 900   2            g_jian_kang_zheng_led=1;
+ 901   2            show_chang_duan();
+ 902   2          break;
+ 903   2          case JIAN_CAO:
+ 904   2            g_jian_cao_led=1;
+ 905   2          break;
+ 906   2          case MI_FAN:
+ 907   2            g_mi_fan_led=1;
+ 908   2            show_chang_duan();
+ 909   2          break;
+ 910   2          case DOU_LEI:
+ 911   2            g_dou_lei_led=1;
+ 912   2            show_chang_duan();
+ 913   2          break;
+ 914   2          case ZHA_LIANG:
+ 915   2            g_zha_liang_led=1;
+ 916   2            show_chang_duan();
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 16  
 
- 910   2            show_chang_duan();
- 911   2          break;
- 912   2          case ZHA_LIANG:
- 913   2            g_zha_liang_led=1;
- 914   2            show_chang_duan();
- 915   2          break;
- 916   2          case YAN_MAI:
- 917   2            g_yan_mai_led=1;
- 918   2          break;
- 919   2          case JI_DAN:
- 920   2            g_ji_dan_led=1;
- 921   2          break;
- 922   2          case SUAN_NAO:
- 923   2            g_suan_nao_led=1;
- 924   2          break;
- 925   2          case FA_JIAO:
- 926   2            g_fa_jiao_led=1;
- 927   2          break;
- 928   2          case XIAO_DU:
- 929   2            g_xiao_du_led=1;
- 930   2          break;
- 931   2          case DAN_GAO:
- 932   2            g_dan_gao_led=1;
- 933   2          break;
- 934   2          case FENG_PEI:
- 935   2            g_feng_pei_led=1;
- 936   2          break;
- 937   2          case JI_YA:
- 938   2            g_ji_ya_led=1;
- 939   2          break;
- 940   2          case BAO_WEN:
- 941   2            g_bao_wen_led=1;
- 942   2          break;
- 943   2          default:
+ 917   2          break;
+ 918   2          case YAN_MAI:
+ 919   2            g_yan_mai_led=1;
+ 920   2          break;
+ 921   2          case JI_DAN:
+ 922   2            g_ji_dan_led=1;
+ 923   2          break;
+ 924   2          case SUAN_NAO:
+ 925   2            g_suan_nao_led=1;
+ 926   2          break;
+ 927   2          case FA_JIAO:
+ 928   2            g_fa_jiao_led=1;
+ 929   2          break;
+ 930   2          case XIAO_DU:
+ 931   2            g_xiao_du_led=1;
+ 932   2          break;
+ 933   2          case DAN_GAO:
+ 934   2            g_dan_gao_led=1;
+ 935   2          break;
+ 936   2          case FENG_PEI:
+ 937   2            g_feng_pei_led=1;
+ 938   2          break;
+ 939   2          case JI_YA:
+ 940   2            g_ji_ya_led=1;
+ 941   2          break;
+ 942   2          case BAO_WEN:
+ 943   2            g_bao_wen_led=1;
  944   2          break;
- 945   2        
- 946   2        }
- 947   1        if(g_yu_yue_shi_jian>0)
- 948   1        {
- 949   2          g_P_led=1;
- 950   2        }
- 951   1        else
- 952   1        {
- 953   2          g_P_led=0;
- 954   2        }
- 955   1        if(g_kid_lock==1)
- 956   1        {
- 957   2          g_L_led=1;
- 958   2        }
- 959   1        else
- 960   1        {
- 961   2          g_L_led=0;
- 962   2        }
- 963   1      }
- 964          void show_seting()
- 965          {
- 966   1        show_none();
- 967   1        show_shu_ma_guan_seting();
- 968   1        show_led();
- 969   1        
- 970   1      
- 971   1      }
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 17  
+ 945   2          default:
+ 946   2          break;
+ 947   2        
+ 948   2        }
+ 949   1        if(g_yu_yue_shi_jian>0)
+ 950   1        {
+ 951   2          g_P_led=1;
+ 952   2        }
+ 953   1        else
+ 954   1        {
+ 955   2          g_P_led=0;
+ 956   2        }
+ 957   1        if(g_kid_lock==1)
+ 958   1        {
+ 959   2          g_L_led=1;
+ 960   2        }
+ 961   1        else
+ 962   1        {
+ 963   2          g_L_led=0;
+ 964   2        }
+ 965   1      }
+ 966          void show_seting()
+ 967          {
+ 968   1        show_none();
+ 969   1        show_shu_ma_guan_seting();
+ 970   1        show_led();
+ 971   1        
+ 972   1      
+ 973   1      }
+ 974          void key_scan()
+ 975          {
+ 976   1        
+ 977   1      
+ 978   1        C_PIN20=SS_INPUT;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 17  
 
- 972          void key_scan()
- 973          {
- 974   1        
- 975   1      
- 976   1        C_PIN20=SS_INPUT;
- 977   1        C_PIN18=SS_INPUT;
- 978   1        C_PIN17=SS_INPUT;
- 979   1        C_PIN24=SS_INPUT;
- 980   1        C_PIN21=SS_INPUT;
- 981   1        C_PIN26=SS_INPUT;
- 982   1        C_PIN25=SS_INPUT;
- 983   1        C_PIN16=SS_INPUT;
- 984   1        C_PIN9=SS_INPUT;
- 985   1        C_PIN13=SS_INPUT;
- 986   1        C_PIN15=SS_INPUT;
- 987   1      
- 988   1        //¹Ø±ÕÊýÂë¹Ü
- 989   1        PIN19=1;  PIN22=1;  PIN23=1;  PIN10=1;
- 990   1        PIN6=1; PIN7=1; PIN8=1; 
- 991   1      
- 992   1        g_key_code=0;
- 993   1        C_PIN12=PP_OUTPUT;
- 994   1        C_PIN13=AN_INPUT;
- 995   1        PIN12=1;
- 996   1        Delay_1us(1);
- 997   1        
- 998   1        g_key_code =S18?18:S2?2:S4?4:S11?11:S9?9:S6?6:S15?15:S19?19:S16?16:0;
- 999   1        if(g_key_code==0)
-1000   1        {
-1001   2          C_PIN12=AN_INPUT;
-1002   2          C_PIN13=PP_OUTPUT;
-1003   2          PIN13=1;  
-1004   2          Delay_1us(1); 
-1005   2          g_key_code =S10?10:S12?12:S17?17:S3?3:S8?8:S1?1:S14?14:S5?5:S7?7:S13?13:0;
-1006   2        }
-1007   1      
-1008   1        C_PIN12=AN_INPUT;
-1009   1        C_PIN13=AN_INPUT;
-1010   1      } 
-1011          void key_plus()
-1012          {
-1013   1        if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
-1014   1        {
-1015   2          g_yu_yue_shi_jian+=30;
-1016   2          if(g_yu_yue_shi_jian>24*60)
-1017   2          {
-1018   3            g_yu_yue_shi_jian=0;
-1019   3          }
-1020   2        }
-1021   1        else
-1022   1        {
-1023   2          if(g_work_mode==DIN_WEN_PENG_REN)
-1024   2          {
-1025   3            g_peng_ren_shi_chang+=1;
-1026   3            if(g_peng_ren_shi_chang>24*60)
-1027   3            {
-1028   4              g_peng_ren_shi_chang=20;
-1029   4            }
-1030   3          }
-1031   2          else if(g_work_mode==DUN_ROU)
-1032   2          {
-1033   3            g_peng_ren_shi_chang+=1;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 18  
+ 979   1        C_PIN18=SS_INPUT;
+ 980   1        C_PIN17=SS_INPUT;
+ 981   1        C_PIN24=SS_INPUT;
+ 982   1        C_PIN21=SS_INPUT;
+ 983   1        C_PIN26=SS_INPUT;
+ 984   1        C_PIN25=SS_INPUT;
+ 985   1        C_PIN16=SS_INPUT;
+ 986   1        C_PIN9=SS_INPUT;
+ 987   1        C_PIN13=SS_INPUT;
+ 988   1        C_PIN15=SS_INPUT;
+ 989   1      
+ 990   1        //¹Ø±ÕÊýÂë¹Ü
+ 991   1        PIN19=1;  PIN22=1;  PIN23=1;  PIN10=1;
+ 992   1        PIN6=1; PIN7=1; PIN8=1; 
+ 993   1      
+ 994   1        g_key_code=0;
+ 995   1        C_PIN12=PP_OUTPUT;
+ 996   1        C_PIN13=AN_INPUT;
+ 997   1        PIN12=1;
+ 998   1        Delay_1us(1);
+ 999   1        
+1000   1        g_key_code =S18?18:S2?2:S4?4:S11?11:S9?9:S6?6:S15?15:S19?19:S16?16:0;
+1001   1        if(g_key_code==0)
+1002   1        {
+1003   2          C_PIN12=AN_INPUT;
+1004   2          C_PIN13=PP_OUTPUT;
+1005   2          PIN13=1;  
+1006   2          Delay_1us(1); 
+1007   2          g_key_code =S10?10:S12?12:S17?17:S3?3:S8?8:S1?1:S14?14:S5?5:S7?7:S13?13:0;
+1008   2        }
+1009   1      
+1010   1        C_PIN12=AN_INPUT;
+1011   1        C_PIN13=AN_INPUT;
+1012   1      } 
+1013          void key_plus()
+1014          {
+1015   1        if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
+1016   1        {
+1017   2          g_yu_yue_shi_jian+=30;
+1018   2          if(g_yu_yue_shi_jian>24*60)
+1019   2          {
+1020   3            g_yu_yue_shi_jian=0;
+1021   3          }
+1022   2        }
+1023   1        else
+1024   1        {
+1025   2          if(g_work_mode==DIN_WEN_PENG_REN)
+1026   2          {
+1027   3            g_peng_ren_shi_chang+=1;
+1028   3            if(g_peng_ren_shi_chang>24*60)
+1029   3            {
+1030   4              g_peng_ren_shi_chang=20;
+1031   4            }
+1032   3          }
+1033   2          else if(g_work_mode==DUN_ROU)
+1034   2          {
+1035   3            g_peng_ren_shi_chang+=1;
+1036   3            if(g_peng_ren_shi_chang>59)
+1037   3            {
+1038   4              g_peng_ren_shi_chang=1;
+1039   4            }
+1040   3          }
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 18  
 
-1034   3            if(g_peng_ren_shi_chang>59)
-1035   3            {
-1036   4              g_peng_ren_shi_chang=1;
-1037   4            }
-1038   3          }
-1039   2          else if(g_work_mode==DUN_TANG)
-1040   2          {
-1041   3            g_peng_ren_shi_chang+=1;
-1042   3            if(g_peng_ren_shi_chang>59)
-1043   3            {
-1044   4              g_peng_ren_shi_chang=1;
-1045   4            }
-1046   3          }
-1047   2          else if(g_work_mode==LAO_HUO_MAN_DUN)
-1048   2          {
-1049   3            g_peng_ren_shi_chang+=30;
-1050   3            if(g_peng_ren_shi_chang>10*60)
-1051   3            {
-1052   4              g_peng_ren_shi_chang=2*60;
-1053   4            }
-1054   3          }
-1055   2          else if(g_work_mode==JIAN_KANG_ZHENG)
-1056   2          {
-1057   3            g_peng_ren_shi_chang+=1;
-1058   3            if(g_peng_ren_shi_chang>59)
-1059   3            {
-1060   4              g_peng_ren_shi_chang=1;
-1061   4            }
-1062   3          }
-1063   2          else if(g_work_mode==JIAN_CAO)
-1064   2          {
-1065   3            g_peng_ren_shi_chang+=1;
-1066   3            if(g_peng_ren_shi_chang>59)
-1067   3            {
-1068   4              g_peng_ren_shi_chang=1;
-1069   4            }
-1070   3          }
-1071   2          else if(g_work_mode==MI_FAN)
-1072   2          {
-1073   3            g_peng_ren_shi_chang+=1;
-1074   3            if(g_peng_ren_shi_chang>59)
-1075   3            {
-1076   4              g_peng_ren_shi_chang=1;
-1077   4            }
-1078   3          }
-1079   2          else if(g_work_mode==DOU_LEI)
-1080   2          {
-1081   3            g_peng_ren_shi_chang+=1;
-1082   3            if(g_peng_ren_shi_chang>59)
-1083   3            {
-1084   4              g_peng_ren_shi_chang=1;
-1085   4            }
-1086   3          }
-1087   2          else if(g_work_mode==ZHA_LIANG)
-1088   2          {
-1089   3            g_peng_ren_shi_chang+=1;
-1090   3            if(g_peng_ren_shi_chang>59)
-1091   3            {
-1092   4              g_peng_ren_shi_chang=1;
-1093   4            }
-1094   3          }
-1095   2          else if(g_work_mode==YAN_MAI)
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 19  
+1041   2          else if(g_work_mode==DUN_TANG)
+1042   2          {
+1043   3            g_peng_ren_shi_chang+=1;
+1044   3            if(g_peng_ren_shi_chang>59)
+1045   3            {
+1046   4              g_peng_ren_shi_chang=1;
+1047   4            }
+1048   3          }
+1049   2          else if(g_work_mode==LAO_HUO_MAN_DUN)
+1050   2          {
+1051   3            g_peng_ren_shi_chang+=30;
+1052   3            if(g_peng_ren_shi_chang>10*60)
+1053   3            {
+1054   4              g_peng_ren_shi_chang=2*60;
+1055   4            }
+1056   3          }
+1057   2          else if(g_work_mode==JIAN_KANG_ZHENG)
+1058   2          {
+1059   3            g_peng_ren_shi_chang+=1;
+1060   3            if(g_peng_ren_shi_chang>59)
+1061   3            {
+1062   4              g_peng_ren_shi_chang=1;
+1063   4            }
+1064   3          }
+1065   2          else if(g_work_mode==JIAN_CAO)
+1066   2          {
+1067   3            g_peng_ren_shi_chang+=1;
+1068   3            if(g_peng_ren_shi_chang>59)
+1069   3            {
+1070   4              g_peng_ren_shi_chang=1;
+1071   4            }
+1072   3          }
+1073   2          else if(g_work_mode==MI_FAN)
+1074   2          {
+1075   3            g_peng_ren_shi_chang+=1;
+1076   3            if(g_peng_ren_shi_chang>59)
+1077   3            {
+1078   4              g_peng_ren_shi_chang=1;
+1079   4            }
+1080   3          }
+1081   2          else if(g_work_mode==DOU_LEI)
+1082   2          {
+1083   3            g_peng_ren_shi_chang+=1;
+1084   3            if(g_peng_ren_shi_chang>59)
+1085   3            {
+1086   4              g_peng_ren_shi_chang=1;
+1087   4            }
+1088   3          }
+1089   2          else if(g_work_mode==ZHA_LIANG)
+1090   2          {
+1091   3            g_peng_ren_shi_chang+=1;
+1092   3            if(g_peng_ren_shi_chang>59)
+1093   3            {
+1094   4              g_peng_ren_shi_chang=1;
+1095   4            }
+1096   3          }
+1097   2          else if(g_work_mode==YAN_MAI)
+1098   2          {
+1099   3            g_peng_ren_shi_chang+=1;
+1100   3            if(g_peng_ren_shi_chang>59)
+1101   3            {
+1102   4              g_peng_ren_shi_chang=1;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 19  
 
-1096   2          {
-1097   3            g_peng_ren_shi_chang+=1;
-1098   3            if(g_peng_ren_shi_chang>59)
-1099   3            {
-1100   4              g_peng_ren_shi_chang=1;
-1101   4            }
-1102   3          }
-1103   2          else if(g_work_mode==JI_DAN)
-1104   2          {
-1105   3            g_peng_ren_shi_chang+=1;
-1106   3            if(g_peng_ren_shi_chang>59)
-1107   3            {
-1108   4              g_peng_ren_shi_chang=1;
-1109   4            }
-1110   3          }
-1111   2          else if(g_work_mode==SUAN_NAO)
-1112   2          {
-1113   3            g_peng_ren_shi_chang+=30;
-1114   3            if(g_peng_ren_shi_chang>12*60)
-1115   3            {
-1116   4              g_peng_ren_shi_chang=6*60;
-1117   4            }
-1118   3          }
-1119   2          else if(g_work_mode==FA_JIAO)
-1120   2          {
-1121   3            g_peng_ren_shi_chang+=10;
-1122   3            if(g_peng_ren_shi_chang>7*60)
-1123   3            {
-1124   4              g_peng_ren_shi_chang=2*60;
-1125   4            }
-1126   3          }
-1127   2          else if(g_work_mode==XIAO_DU)
-1128   2          {
-1129   3            g_peng_ren_shi_chang+=1;
-1130   3            if(g_peng_ren_shi_chang>59)
-1131   3            {
-1132   4              g_peng_ren_shi_chang=1;
-1133   4            }
-1134   3          }
-1135   2          else if(g_work_mode==DAN_GAO)
-1136   2          {
-1137   3            g_peng_ren_shi_chang+=1;
-1138   3            if(g_peng_ren_shi_chang>59)
-1139   3            {
-1140   4              g_peng_ren_shi_chang=1;
-1141   4            }
-1142   3          }
-1143   2          else if(g_work_mode==FENG_PEI)
-1144   2          {
-1145   3            g_peng_ren_shi_chang+=1;
-1146   3            if(g_peng_ren_shi_chang>59)
-1147   3            {
-1148   4              g_peng_ren_shi_chang=1;
-1149   4            }
-1150   3          }
-1151   2          else if(g_work_mode==JI_YA)
-1152   2          {
-1153   3            g_peng_ren_shi_chang+=1;
-1154   3            if(g_peng_ren_shi_chang>59)
-1155   3            {
-1156   4              g_peng_ren_shi_chang=1;
-1157   4            }
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 20  
+1103   4            }
+1104   3          }
+1105   2          else if(g_work_mode==JI_DAN)
+1106   2          {
+1107   3            g_peng_ren_shi_chang+=1;
+1108   3            if(g_peng_ren_shi_chang>59)
+1109   3            {
+1110   4              g_peng_ren_shi_chang=1;
+1111   4            }
+1112   3          }
+1113   2          else if(g_work_mode==SUAN_NAO)
+1114   2          {
+1115   3            g_peng_ren_shi_chang+=30;
+1116   3            if(g_peng_ren_shi_chang>12*60)
+1117   3            {
+1118   4              g_peng_ren_shi_chang=6*60;
+1119   4            }
+1120   3          }
+1121   2          else if(g_work_mode==FA_JIAO)
+1122   2          {
+1123   3            g_peng_ren_shi_chang+=10;
+1124   3            if(g_peng_ren_shi_chang>7*60)
+1125   3            {
+1126   4              g_peng_ren_shi_chang=2*60;
+1127   4            }
+1128   3          }
+1129   2          else if(g_work_mode==XIAO_DU)
+1130   2          {
+1131   3            g_peng_ren_shi_chang+=1;
+1132   3            if(g_peng_ren_shi_chang>59)
+1133   3            {
+1134   4              g_peng_ren_shi_chang=1;
+1135   4            }
+1136   3          }
+1137   2          else if(g_work_mode==DAN_GAO)
+1138   2          {
+1139   3            g_peng_ren_shi_chang+=1;
+1140   3            if(g_peng_ren_shi_chang>59)
+1141   3            {
+1142   4              g_peng_ren_shi_chang=1;
+1143   4            }
+1144   3          }
+1145   2          else if(g_work_mode==FENG_PEI)
+1146   2          {
+1147   3            g_peng_ren_shi_chang+=1;
+1148   3            if(g_peng_ren_shi_chang>59)
+1149   3            {
+1150   4              g_peng_ren_shi_chang=1;
+1151   4            }
+1152   3          }
+1153   2          else if(g_work_mode==JI_YA)
+1154   2          {
+1155   3            g_peng_ren_shi_chang+=1;
+1156   3            if(g_peng_ren_shi_chang>59)
+1157   3            {
+1158   4              g_peng_ren_shi_chang=1;
+1159   4            }
+1160   3          }
+1161   2        }
+1162   1      }
+1163          void key_jian()
+1164          {
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 20  
 
-1158   3          }
-1159   2        }
-1160   1      }
-1161          void key_jian()
-1162          {
-1163   1        if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
-1164   1        {
-1165   2          
-1166   2          if(g_yu_yue_shi_jian==0)
-1167   2          {
-1168   3            g_yu_yue_shi_jian=24*60;      
-1169   3          }
-1170   2          else
-1171   2          {
-1172   3            g_yu_yue_shi_jian-=30;
-1173   3          }
-1174   2      
-1175   2        }
-1176   1        else
-1177   1        {
-1178   2          if(g_work_mode==DIN_WEN_PENG_REN)
-1179   2          {
-1180   3            
-1181   3            if(g_peng_ren_shi_chang>=20)
-1182   3            {
-1183   4              g_peng_ren_shi_chang-=1;
-1184   4              if(g_peng_ren_shi_chang<20)
-1185   4              {
-1186   5                g_peng_ren_shi_chang=24*60;
-1187   5              }
-1188   4              
-1189   4            }
-1190   3          }
-1191   2          else if(g_work_mode==DUN_ROU)
-1192   2          {
-1193   3            if(g_peng_ren_shi_chang>=1)
-1194   3            {
-1195   4              g_peng_ren_shi_chang-=1;
-1196   4              if(g_peng_ren_shi_chang==0)
-1197   4              {
-1198   5                g_peng_ren_shi_chang=59;
-1199   5              }
-1200   4            }
-1201   3          }
-1202   2          else if(g_work_mode==DUN_TANG)
-1203   2          {
-1204   3            if(g_peng_ren_shi_chang>=1)
-1205   3            {
-1206   4              g_peng_ren_shi_chang-=1;
-1207   4              if(g_peng_ren_shi_chang==0)
-1208   4              {
-1209   5                g_peng_ren_shi_chang=59;
-1210   5              }
-1211   4            }
-1212   3          }
-1213   2          else if(g_work_mode==LAO_HUO_MAN_DUN)
-1214   2          {
-1215   3            if(g_peng_ren_shi_chang>=2*60)
-1216   3            {
-1217   4              g_peng_ren_shi_chang-=30;
-1218   4              if(g_peng_ren_shi_chang<2*60)
-1219   4              {
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 21  
+1165   1        if(g_yu_yue_shi_jian>0 || g_yu_yue_ing==1)
+1166   1        {
+1167   2          
+1168   2          if(g_yu_yue_shi_jian==0)
+1169   2          {
+1170   3            g_yu_yue_shi_jian=24*60;      
+1171   3          }
+1172   2          else
+1173   2          {
+1174   3            g_yu_yue_shi_jian-=30;
+1175   3          }
+1176   2      
+1177   2        }
+1178   1        else
+1179   1        {
+1180   2          if(g_work_mode==DIN_WEN_PENG_REN)
+1181   2          {
+1182   3            
+1183   3            if(g_peng_ren_shi_chang>=20)
+1184   3            {
+1185   4              g_peng_ren_shi_chang-=1;
+1186   4              if(g_peng_ren_shi_chang<20)
+1187   4              {
+1188   5                g_peng_ren_shi_chang=24*60;
+1189   5              }
+1190   4              
+1191   4            }
+1192   3          }
+1193   2          else if(g_work_mode==DUN_ROU)
+1194   2          {
+1195   3            if(g_peng_ren_shi_chang>=1)
+1196   3            {
+1197   4              g_peng_ren_shi_chang-=1;
+1198   4              if(g_peng_ren_shi_chang==0)
+1199   4              {
+1200   5                g_peng_ren_shi_chang=59;
+1201   5              }
+1202   4            }
+1203   3          }
+1204   2          else if(g_work_mode==DUN_TANG)
+1205   2          {
+1206   3            if(g_peng_ren_shi_chang>=1)
+1207   3            {
+1208   4              g_peng_ren_shi_chang-=1;
+1209   4              if(g_peng_ren_shi_chang==0)
+1210   4              {
+1211   5                g_peng_ren_shi_chang=59;
+1212   5              }
+1213   4            }
+1214   3          }
+1215   2          else if(g_work_mode==LAO_HUO_MAN_DUN)
+1216   2          {
+1217   3            if(g_peng_ren_shi_chang>=2*60)
+1218   3            {
+1219   4              g_peng_ren_shi_chang-=30;
+1220   4              if(g_peng_ren_shi_chang<2*60)
+1221   4              {
+1222   5                g_peng_ren_shi_chang=10*60;
+1223   5              }
+1224   4      
+1225   4            }
+1226   3          }
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 21  
 
-1220   5                g_peng_ren_shi_chang=10*60;
-1221   5              }
-1222   4      
-1223   4            }
-1224   3          }
-1225   2          else if(g_work_mode==JIAN_KANG_ZHENG)
-1226   2          {
-1227   3            if(g_peng_ren_shi_chang>=1)
-1228   3            {
-1229   4              g_peng_ren_shi_chang-=1;
-1230   4              if(g_peng_ren_shi_chang==0)
-1231   4              {
-1232   5                g_peng_ren_shi_chang=59;
-1233   5              }
-1234   4            }
-1235   3          }
-1236   2          else if(g_work_mode==JIAN_CAO)
-1237   2          {
-1238   3            if(g_peng_ren_shi_chang>=1)
-1239   3            {
-1240   4              g_peng_ren_shi_chang-=1;
-1241   4              if(g_peng_ren_shi_chang==0)
-1242   4              {
-1243   5                g_peng_ren_shi_chang=59;
-1244   5              }
-1245   4            }
-1246   3          }
-1247   2          else if(g_work_mode==MI_FAN)
-1248   2          {
-1249   3            if(g_peng_ren_shi_chang>=1)
-1250   3            {
-1251   4              g_peng_ren_shi_chang-=1;
-1252   4              if(g_peng_ren_shi_chang==0)
-1253   4              {
-1254   5                g_peng_ren_shi_chang=59;
-1255   5              }
-1256   4            }
-1257   3          }
-1258   2          else if(g_work_mode==DOU_LEI)
-1259   2          {
-1260   3            if(g_peng_ren_shi_chang>=1)
-1261   3            {
-1262   4              g_peng_ren_shi_chang-=1;
-1263   4              if(g_peng_ren_shi_chang==0)
-1264   4              {
-1265   5                g_peng_ren_shi_chang=59;
-1266   5              }
-1267   4            }
-1268   3          }
-1269   2          else if(g_work_mode==ZHA_LIANG)
-1270   2          {
-1271   3            if(g_peng_ren_shi_chang>=1)
-1272   3            {
-1273   4              g_peng_ren_shi_chang-=1;
-1274   4              if(g_peng_ren_shi_chang==0)
-1275   4              {
-1276   5                g_peng_ren_shi_chang=59;
-1277   5              }
-1278   4            }
-1279   3          }
-1280   2          else if(g_work_mode==YAN_MAI)
-1281   2          {
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 22  
+1227   2          else if(g_work_mode==JIAN_KANG_ZHENG)
+1228   2          {
+1229   3            if(g_peng_ren_shi_chang>=1)
+1230   3            {
+1231   4              g_peng_ren_shi_chang-=1;
+1232   4              if(g_peng_ren_shi_chang==0)
+1233   4              {
+1234   5                g_peng_ren_shi_chang=59;
+1235   5              }
+1236   4            }
+1237   3          }
+1238   2          else if(g_work_mode==JIAN_CAO)
+1239   2          {
+1240   3            if(g_peng_ren_shi_chang>=1)
+1241   3            {
+1242   4              g_peng_ren_shi_chang-=1;
+1243   4              if(g_peng_ren_shi_chang==0)
+1244   4              {
+1245   5                g_peng_ren_shi_chang=59;
+1246   5              }
+1247   4            }
+1248   3          }
+1249   2          else if(g_work_mode==MI_FAN)
+1250   2          {
+1251   3            if(g_peng_ren_shi_chang>=1)
+1252   3            {
+1253   4              g_peng_ren_shi_chang-=1;
+1254   4              if(g_peng_ren_shi_chang==0)
+1255   4              {
+1256   5                g_peng_ren_shi_chang=59;
+1257   5              }
+1258   4            }
+1259   3          }
+1260   2          else if(g_work_mode==DOU_LEI)
+1261   2          {
+1262   3            if(g_peng_ren_shi_chang>=1)
+1263   3            {
+1264   4              g_peng_ren_shi_chang-=1;
+1265   4              if(g_peng_ren_shi_chang==0)
+1266   4              {
+1267   5                g_peng_ren_shi_chang=59;
+1268   5              }
+1269   4            }
+1270   3          }
+1271   2          else if(g_work_mode==ZHA_LIANG)
+1272   2          {
+1273   3            if(g_peng_ren_shi_chang>=1)
+1274   3            {
+1275   4              g_peng_ren_shi_chang-=1;
+1276   4              if(g_peng_ren_shi_chang==0)
+1277   4              {
+1278   5                g_peng_ren_shi_chang=59;
+1279   5              }
+1280   4            }
+1281   3          }
+1282   2          else if(g_work_mode==YAN_MAI)
+1283   2          {
+1284   3            if(g_peng_ren_shi_chang>=1)
+1285   3            {
+1286   4              g_peng_ren_shi_chang-=1;
+1287   4              if(g_peng_ren_shi_chang==0)
+1288   4              {
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 22  
 
-1282   3            if(g_peng_ren_shi_chang>=1)
-1283   3            {
-1284   4              g_peng_ren_shi_chang-=1;
-1285   4              if(g_peng_ren_shi_chang==0)
-1286   4              {
-1287   5                g_peng_ren_shi_chang=59;
-1288   5              }
-1289   4            }
-1290   3          }
-1291   2          else if(g_work_mode==JI_DAN)
-1292   2          {
-1293   3            if(g_peng_ren_shi_chang>=1)
-1294   3            {
-1295   4              g_peng_ren_shi_chang-=1;
-1296   4              if(g_peng_ren_shi_chang==0)
-1297   4              {
-1298   5                g_peng_ren_shi_chang=59;
-1299   5              }
-1300   4            }
-1301   3          }
-1302   2          else if(g_work_mode==SUAN_NAO)
-1303   2          {
-1304   3            if(g_peng_ren_shi_chang>=6*60)
-1305   3            {
-1306   4              g_peng_ren_shi_chang-=30;
-1307   4              if(g_peng_ren_shi_chang<6*60)
-1308   4              {
-1309   5                g_peng_ren_shi_chang=12*60;
-1310   5              }
-1311   4      
-1312   4            }
-1313   3          }
-1314   2          else if(g_work_mode==FA_JIAO)
-1315   2          {
-1316   3            if(g_peng_ren_shi_chang>=2*60)
-1317   3            {
-1318   4              g_peng_ren_shi_chang-=10;
-1319   4              if(g_peng_ren_shi_chang<2*60)
-1320   4              {
-1321   5                g_peng_ren_shi_chang=7*60;
-1322   5              }
-1323   4      
-1324   4            }
-1325   3          }
-1326   2          else if(g_work_mode==XIAO_DU)
-1327   2          {
-1328   3            if(g_peng_ren_shi_chang>=1)
-1329   3            {
-1330   4              g_peng_ren_shi_chang-=1;
-1331   4              if(g_peng_ren_shi_chang==0)
-1332   4              {
-1333   5                g_peng_ren_shi_chang=59;
-1334   5              }
-1335   4            }
-1336   3          }
-1337   2          else if(g_work_mode==DAN_GAO)
-1338   2          {
-1339   3            if(g_peng_ren_shi_chang>=1)
-1340   3            {
-1341   4              g_peng_ren_shi_chang-=1;
-1342   4              if(g_peng_ren_shi_chang==0)
-1343   4              {
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 23  
+1289   5                g_peng_ren_shi_chang=59;
+1290   5              }
+1291   4            }
+1292   3          }
+1293   2          else if(g_work_mode==JI_DAN)
+1294   2          {
+1295   3            if(g_peng_ren_shi_chang>=1)
+1296   3            {
+1297   4              g_peng_ren_shi_chang-=1;
+1298   4              if(g_peng_ren_shi_chang==0)
+1299   4              {
+1300   5                g_peng_ren_shi_chang=59;
+1301   5              }
+1302   4            }
+1303   3          }
+1304   2          else if(g_work_mode==SUAN_NAO)
+1305   2          {
+1306   3            if(g_peng_ren_shi_chang>=6*60)
+1307   3            {
+1308   4              g_peng_ren_shi_chang-=30;
+1309   4              if(g_peng_ren_shi_chang<6*60)
+1310   4              {
+1311   5                g_peng_ren_shi_chang=12*60;
+1312   5              }
+1313   4      
+1314   4            }
+1315   3          }
+1316   2          else if(g_work_mode==FA_JIAO)
+1317   2          {
+1318   3            if(g_peng_ren_shi_chang>=2*60)
+1319   3            {
+1320   4              g_peng_ren_shi_chang-=10;
+1321   4              if(g_peng_ren_shi_chang<2*60)
+1322   4              {
+1323   5                g_peng_ren_shi_chang=7*60;
+1324   5              }
+1325   4      
+1326   4            }
+1327   3          }
+1328   2          else if(g_work_mode==XIAO_DU)
+1329   2          {
+1330   3            if(g_peng_ren_shi_chang>=1)
+1331   3            {
+1332   4              g_peng_ren_shi_chang-=1;
+1333   4              if(g_peng_ren_shi_chang==0)
+1334   4              {
+1335   5                g_peng_ren_shi_chang=59;
+1336   5              }
+1337   4            }
+1338   3          }
+1339   2          else if(g_work_mode==DAN_GAO)
+1340   2          {
+1341   3            if(g_peng_ren_shi_chang>=1)
+1342   3            {
+1343   4              g_peng_ren_shi_chang-=1;
+1344   4              if(g_peng_ren_shi_chang==0)
+1345   4              {
+1346   5                g_peng_ren_shi_chang=59;
+1347   5              }
+1348   4            }
+1349   3          }
+1350   2          else if(g_work_mode==FENG_PEI)
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 23  
 
-1344   5                g_peng_ren_shi_chang=59;
-1345   5              }
-1346   4            }
-1347   3          }
-1348   2          else if(g_work_mode==FENG_PEI)
-1349   2          {
-1350   3            if(g_peng_ren_shi_chang>=1)
-1351   3            {
-1352   4              g_peng_ren_shi_chang-=1;
-1353   4              if(g_peng_ren_shi_chang==0)
-1354   4              {
-1355   5                g_peng_ren_shi_chang=59;
-1356   5              }
-1357   4            }
-1358   3          }
-1359   2          else if(g_work_mode==JI_YA)
-1360   2          {
-1361   3            if(g_peng_ren_shi_chang>=1)
-1362   3            {
-1363   4              g_peng_ren_shi_chang-=1;
-1364   4              if(g_peng_ren_shi_chang==0)
-1365   4              {
-1366   5                g_peng_ren_shi_chang=59;
-1367   5              }
-1368   4            }
-1369   3          }
-1370   2        }
-1371   1      }
-1372          void xiao_peng_ren_shi_jian()
-1373          {
-1374   1        if(g_work_mode==DUN_ROU)
-1375   1        {
-1376   2          if(g_xiao_peng_ren_shi_jian==0)
-1377   2          {
-1378   3            g_peng_ren_shi_chang=35;
-1379   3            g_xiao_peng_ren_shi_jian=1;
-1380   3            g_peng_ren_chang_duan_shi_jian=2;
-1381   3          }
-1382   2          else if(g_xiao_peng_ren_shi_jian==1)
-1383   2          {
-1384   3            g_peng_ren_shi_chang=25;
-1385   3            g_xiao_peng_ren_shi_jian=2;
-1386   3            g_peng_ren_chang_duan_shi_jian=0;
-1387   3          }
-1388   2          else if(g_xiao_peng_ren_shi_jian==2)
-1389   2          {
-1390   3            g_peng_ren_shi_chang=30;
-1391   3            g_xiao_peng_ren_shi_jian=0;
-1392   3            g_peng_ren_chang_duan_shi_jian=1;
-1393   3          }
-1394   2        }
-1395   1        else if(g_work_mode==DUN_TANG)
-1396   1        {
-1397   2          if(g_xiao_peng_ren_shi_jian==0)
-1398   2          {
-1399   3            g_peng_ren_shi_chang=30;
-1400   3            g_xiao_peng_ren_shi_jian=1;
-1401   3            g_peng_ren_chang_duan_shi_jian=2;
-1402   3          }
-1403   2          else if(g_xiao_peng_ren_shi_jian==1)
-1404   2          {
-1405   3            g_peng_ren_shi_chang=20;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 24  
+1351   2          {
+1352   3            if(g_peng_ren_shi_chang>=1)
+1353   3            {
+1354   4              g_peng_ren_shi_chang-=1;
+1355   4              if(g_peng_ren_shi_chang==0)
+1356   4              {
+1357   5                g_peng_ren_shi_chang=59;
+1358   5              }
+1359   4            }
+1360   3          }
+1361   2          else if(g_work_mode==JI_YA)
+1362   2          {
+1363   3            if(g_peng_ren_shi_chang>=1)
+1364   3            {
+1365   4              g_peng_ren_shi_chang-=1;
+1366   4              if(g_peng_ren_shi_chang==0)
+1367   4              {
+1368   5                g_peng_ren_shi_chang=59;
+1369   5              }
+1370   4            }
+1371   3          }
+1372   2        }
+1373   1      }
+1374          void xiao_peng_ren_shi_jian()
+1375          {
+1376   1        if(g_work_mode==DUN_ROU)
+1377   1        {
+1378   2          buzzer(1);
+1379   2          if(g_xiao_peng_ren_shi_jian==0)
+1380   2          {
+1381   3            g_peng_ren_shi_chang=35;
+1382   3            g_xiao_peng_ren_shi_jian=1;
+1383   3            g_peng_ren_chang_duan_shi_jian=2;
+1384   3          }
+1385   2          else if(g_xiao_peng_ren_shi_jian==1)
+1386   2          {
+1387   3            g_peng_ren_shi_chang=25;
+1388   3            g_xiao_peng_ren_shi_jian=2;
+1389   3            g_peng_ren_chang_duan_shi_jian=0;
+1390   3          }
+1391   2          else if(g_xiao_peng_ren_shi_jian==2)
+1392   2          {
+1393   3            g_peng_ren_shi_chang=30;
+1394   3            g_xiao_peng_ren_shi_jian=0;
+1395   3            g_peng_ren_chang_duan_shi_jian=1;
+1396   3          }
+1397   2        }
+1398   1        else if(g_work_mode==DUN_TANG)
+1399   1        {
+1400   2          buzzer(1);
+1401   2          if(g_xiao_peng_ren_shi_jian==0)
+1402   2          {
+1403   3            g_peng_ren_shi_chang=30;
+1404   3            g_xiao_peng_ren_shi_jian=1;
+1405   3            g_peng_ren_chang_duan_shi_jian=2;
+1406   3          }
+1407   2          else if(g_xiao_peng_ren_shi_jian==1)
+1408   2          {
+1409   3            g_peng_ren_shi_chang=20;
+1410   3            g_xiao_peng_ren_shi_jian=2;
+1411   3            g_peng_ren_chang_duan_shi_jian=0;
+1412   3          }
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 24  
 
-1406   3            g_xiao_peng_ren_shi_jian=2;
-1407   3            g_peng_ren_chang_duan_shi_jian=0;
-1408   3          }
-1409   2          else if(g_xiao_peng_ren_shi_jian==2)
-1410   2          {
-1411   3            g_peng_ren_shi_chang=25;
-1412   3            g_xiao_peng_ren_shi_jian=0;
-1413   3            g_peng_ren_chang_duan_shi_jian=1;
-1414   3          }
-1415   2        }
-1416   1        else if(g_work_mode==JIAN_KANG_ZHENG)
-1417   1        {
-1418   2          if(g_xiao_peng_ren_shi_jian==0)
-1419   2          {
-1420   3            g_peng_ren_shi_chang=15;
-1421   3            g_xiao_peng_ren_shi_jian=1;
-1422   3            g_peng_ren_chang_duan_shi_jian=2;
-1423   3          }
-1424   2          else if(g_xiao_peng_ren_shi_jian==1)
-1425   2          {
-1426   3            g_peng_ren_shi_chang=5;
-1427   3            g_xiao_peng_ren_shi_jian=2;
-1428   3            g_peng_ren_chang_duan_shi_jian=0;
-1429   3          }
-1430   2          else if(g_xiao_peng_ren_shi_jian==2)
-1431   2          {
-1432   3            g_peng_ren_shi_chang=10;
-1433   3            g_xiao_peng_ren_shi_jian=0;
-1434   3            g_peng_ren_chang_duan_shi_jian=1;
-1435   3          }
-1436   2        }
-1437   1        else if(g_work_mode==MI_FAN)
-1438   1        {
-1439   2          if(g_xiao_peng_ren_shi_jian==0)
-1440   2          {
-1441   3            g_peng_ren_shi_chang=15;
-1442   3            g_xiao_peng_ren_shi_jian=1;
-1443   3            g_peng_ren_chang_duan_shi_jian=2;
-1444   3          }
-1445   2          else if(g_xiao_peng_ren_shi_jian==1)
+1413   2          else if(g_xiao_peng_ren_shi_jian==2)
+1414   2          {
+1415   3            g_peng_ren_shi_chang=25;
+1416   3            g_xiao_peng_ren_shi_jian=0;
+1417   3            g_peng_ren_chang_duan_shi_jian=1;
+1418   3          }
+1419   2        }
+1420   1        else if(g_work_mode==JIAN_KANG_ZHENG)
+1421   1        {
+1422   2          buzzer(1);
+1423   2          if(g_xiao_peng_ren_shi_jian==0)
+1424   2          {
+1425   3            g_peng_ren_shi_chang=15;
+1426   3            g_xiao_peng_ren_shi_jian=1;
+1427   3            g_peng_ren_chang_duan_shi_jian=2;
+1428   3          }
+1429   2          else if(g_xiao_peng_ren_shi_jian==1)
+1430   2          {
+1431   3            g_peng_ren_shi_chang=5;
+1432   3            g_xiao_peng_ren_shi_jian=2;
+1433   3            g_peng_ren_chang_duan_shi_jian=0;
+1434   3          }
+1435   2          else if(g_xiao_peng_ren_shi_jian==2)
+1436   2          {
+1437   3            g_peng_ren_shi_chang=10;
+1438   3            g_xiao_peng_ren_shi_jian=0;
+1439   3            g_peng_ren_chang_duan_shi_jian=1;
+1440   3          }
+1441   2        }
+1442   1        else if(g_work_mode==MI_FAN)
+1443   1        {
+1444   2          buzzer(1);
+1445   2          if(g_xiao_peng_ren_shi_jian==0)
 1446   2          {
-1447   3            g_peng_ren_shi_chang=10;
-1448   3            g_xiao_peng_ren_shi_jian=2;
-1449   3            g_peng_ren_chang_duan_shi_jian=0; 
+1447   3            g_peng_ren_shi_chang=15;
+1448   3            g_xiao_peng_ren_shi_jian=1;
+1449   3            g_peng_ren_chang_duan_shi_jian=2;
 1450   3          }
-1451   2          else if(g_xiao_peng_ren_shi_jian==2)
+1451   2          else if(g_xiao_peng_ren_shi_jian==1)
 1452   2          {
-1453   3            g_peng_ren_shi_chang=12;
-1454   3            g_xiao_peng_ren_shi_jian=0;
-1455   3            g_peng_ren_chang_duan_shi_jian=1;
+1453   3            g_peng_ren_shi_chang=10;
+1454   3            g_xiao_peng_ren_shi_jian=2;
+1455   3            g_peng_ren_chang_duan_shi_jian=0; 
 1456   3          }
-1457   2        }
-1458   1        else if(g_work_mode==DOU_LEI)
-1459   1        {
-1460   2          if(g_xiao_peng_ren_shi_jian==0)
-1461   2          {
-1462   3            g_peng_ren_shi_chang=40;
-1463   3            g_xiao_peng_ren_shi_jian=1;
-1464   3            g_peng_ren_chang_duan_shi_jian=2;
-1465   3          }
-1466   2          else if(g_xiao_peng_ren_shi_jian==1)
-1467   2          {
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 25  
+1457   2          else if(g_xiao_peng_ren_shi_jian==2)
+1458   2          {
+1459   3            g_peng_ren_shi_chang=12;
+1460   3            g_xiao_peng_ren_shi_jian=0;
+1461   3            g_peng_ren_chang_duan_shi_jian=1;
+1462   3          }
+1463   2        }
+1464   1        else if(g_work_mode==DOU_LEI)
+1465   1        {
+1466   2          buzzer(1);
+1467   2          if(g_xiao_peng_ren_shi_jian==0)
+1468   2          {
+1469   3            g_peng_ren_shi_chang=40;
+1470   3            g_xiao_peng_ren_shi_jian=1;
+1471   3            g_peng_ren_chang_duan_shi_jian=2;
+1472   3          }
+1473   2          else if(g_xiao_peng_ren_shi_jian==1)
+1474   2          {
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 25  
 
-1468   3            g_peng_ren_shi_chang=30;
-1469   3            g_xiao_peng_ren_shi_jian=2;
-1470   3            g_peng_ren_chang_duan_shi_jian=0;
-1471   3          }
-1472   2          else if(g_xiao_peng_ren_shi_jian==2)
-1473   2          {
-1474   3            g_peng_ren_shi_chang=35;
-1475   3            g_xiao_peng_ren_shi_jian=0;
-1476   3            g_peng_ren_chang_duan_shi_jian=1; 
-1477   3          }
-1478   2        }
-1479   1        else if(g_work_mode==ZHA_LIANG)
-1480   1        {
-1481   2          if(g_xiao_peng_ren_shi_jian==0)
-1482   2          {
-1483   3            g_peng_ren_shi_chang=25;
-1484   3            g_xiao_peng_ren_shi_jian=1;
-1485   3            g_peng_ren_chang_duan_shi_jian=2;
-1486   3          }
-1487   2          else if(g_xiao_peng_ren_shi_jian==1)
-1488   2          {
-1489   3            g_peng_ren_shi_chang=15;
-1490   3            g_xiao_peng_ren_shi_jian=2;
-1491   3            g_peng_ren_chang_duan_shi_jian=0;
-1492   3          }
-1493   2          else if(g_xiao_peng_ren_shi_jian==2)
-1494   2          {
-1495   3            g_peng_ren_shi_chang=20;
-1496   3            g_xiao_peng_ren_shi_jian=0;
-1497   3            g_peng_ren_chang_duan_shi_jian=1;
-1498   3          }
-1499   2        }
-1500   1      }
-1501          void key_operate()
-1502          {
-1503   1        static char key_on=0;
-1504   1        static short long_press_counter=0,one_times=0;
-1505   1        if(g_key_code!=0)
-1506   1        {
-1507   2          if(key_on==1)
-1508   2          {     
-1509   3            if(long_press_counter<500)
-1510   3            {
-1511   4              long_press_counter++;
-1512   4            }
-1513   3            else
-1514   3            {
-1515   4      
-1516   4              if(one_times++>100)
-1517   4              {
-1518   5                if(g_key_code==16 && g_work_mode!=0 && g_work_start==0)
-1519   5                {
-1520   6                  key_plus();
-1521   6                  if(g_work_mode==DIN_WEN_PENG_REN)
-1522   6                  {
-1523   7                    key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();
-1524   7                  }
-1525   6                }
-1526   5                else if(g_key_code==15 && g_work_mode!=0 && g_work_start==0)
+1475   3            g_peng_ren_shi_chang=30;
+1476   3            g_xiao_peng_ren_shi_jian=2;
+1477   3            g_peng_ren_chang_duan_shi_jian=0;
+1478   3          }
+1479   2          else if(g_xiao_peng_ren_shi_jian==2)
+1480   2          {
+1481   3            g_peng_ren_shi_chang=35;
+1482   3            g_xiao_peng_ren_shi_jian=0;
+1483   3            g_peng_ren_chang_duan_shi_jian=1; 
+1484   3          }
+1485   2        }
+1486   1        else if(g_work_mode==ZHA_LIANG)
+1487   1        {
+1488   2          buzzer(1);
+1489   2          if(g_xiao_peng_ren_shi_jian==0)
+1490   2          {
+1491   3            g_peng_ren_shi_chang=25;
+1492   3            g_xiao_peng_ren_shi_jian=1;
+1493   3            g_peng_ren_chang_duan_shi_jian=2;
+1494   3          }
+1495   2          else if(g_xiao_peng_ren_shi_jian==1)
+1496   2          {
+1497   3            g_peng_ren_shi_chang=15;
+1498   3            g_xiao_peng_ren_shi_jian=2;
+1499   3            g_peng_ren_chang_duan_shi_jian=0;
+1500   3          }
+1501   2          else if(g_xiao_peng_ren_shi_jian==2)
+1502   2          {
+1503   3            g_peng_ren_shi_chang=20;
+1504   3            g_xiao_peng_ren_shi_jian=0;
+1505   3            g_peng_ren_chang_duan_shi_jian=1;
+1506   3          }
+1507   2        }
+1508   1      }
+1509          void key_operate()
+1510          {
+1511   1        static char key_on=0;
+1512   1        static short long_press_counter=0,one_times=0;
+1513   1        if(g_key_code!=0)
+1514   1        {
+1515   2          if(key_on==1)
+1516   2          {     
+1517   3            if(long_press_counter<500)
+1518   3            {
+1519   4              long_press_counter++;
+1520   4            }
+1521   3            else
+1522   3            {
+1523   4      
+1524   4              if(one_times++>100)
+1525   4              {
+1526   5                if(g_key_code==16 && g_work_mode!=0 && g_work_start==0)
 1527   5                {
-1528   6                  key_jian();
+1528   6                  key_plus();
 1529   6                  if(g_work_mode==DIN_WEN_PENG_REN)
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 26  
-
 1530   6                  {
-1531   7                    key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();
+1531   7                    key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();key_plus();
 1532   7                  }
 1533   6                }
-1534   5                else if(g_key_code==1 && g_work_mode==DIN_WEN_PENG_REN && g_work_start==0)
+1534   5                else if(g_key_code==15 && g_work_mode!=0 && g_work_start==0)
 1535   5                {
-1536   6                  if(g_seting_wen_du==1)
-1537   6                  {
-1538   7                    g_peng_ren_wen_du++;
-1539   7                  }           
-1540   6                  if(g_peng_ren_wen_du>90)
-1541   6                  {
-1542   7                    g_peng_ren_wen_du=45;
-1543   7                  }
-1544   6                }
-1545   5                one_times=0;
-1546   5              }
-1547   4              if(g_key_code==13 && g_kid_lock==1)
-1548   4              {
-1549   5                g_kid_lock=0;
-1550   5                buzzer(2);
-1551   5              }
-1552   4              
-1553   4            }
-1554   3            if(g_work_start==0)
-1555   3            {
-1556   4              g_operate_counter=0;
-1557   4            }
-1558   3      
-1559   3          }
-1560   2          else 
-1561   2          { 
-1562   3      
-1563   3            long_press_counter=0;
-1564   3            key_on=1;
-1565   3      
-1566   3            if(g_stop_counter>=240000)
-1567   3            {
-1568   4              g_stop_counter=0;
-1569   4              return;
-1570   4            }
-1571   3            g_stop_counter=0;
-1572   3            if(g_kid_lock==0)
-1573   3            {
-1574   4              if(g_work_start==0)
-1575   4              {
-1576   5                buzzer(1);
-1577   5                g_operate_counter=0;
-1578   5                if(g_key_code==1)
-1579   5                {
-1580   6                  if(g_work_mode!=DIN_WEN_PENG_REN)
-1581   6                  {
-1582   7                    g_work_mode=DIN_WEN_PENG_REN;
-1583   7                    g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1584   7                    g_yu_yue_shi_jian=0;
-1585   7                    g_yu_yue_ing=0;
-1586   7                    g_peng_ren_wen_du=50;
-1587   7      
-1588   7                  }
-1589   6                  else
-1590   6                  {
-1591   7                    if(g_seting_wen_du==1)
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 27  
+1536   6                  key_jian();
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 26  
 
-1592   7                    {
-1593   8                      g_peng_ren_wen_du++;
-1594   8                    }           
-1595   7                    if(g_peng_ren_wen_du>90)
-1596   7                    {
-1597   8                      g_peng_ren_wen_du=45;
-1598   8                    }
-1599   7                    g_seting_wen_du=1;
-1600   7                  }
-1601   6                  g_dai_P=0;
-1602   6                  g_dai_no_P=1;
-1603   6                  
-1604   6                }
-1605   5                else if(g_key_code==2)
-1606   5                {
-1607   6                  g_work_mode=DUN_ROU;
-1608   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1609   6                  g_yu_yue_shi_jian=0;
-1610   6                  g_yu_yue_ing=0;
-1611   6                  g_xiao_peng_ren_shi_jian=0;
-1612   6                  g_peng_ren_chang_duan_shi_jian=1;
-1613   6                  g_peng_ren_wen_du=165;
-1614   6                  g_dai_P=1;
-1615   6                  g_dai_no_P=0;
-1616   6                }
-1617   5                else if(g_key_code==3)
-1618   5                {
-1619   6                  g_work_mode=DUN_TANG;
-1620   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1621   6                  g_yu_yue_shi_jian=0;
-1622   6                  g_yu_yue_ing=0;
-1623   6                  g_xiao_peng_ren_shi_jian=0;
-1624   6                  g_peng_ren_chang_duan_shi_jian=1;
-1625   6                  g_peng_ren_wen_du=165;
-1626   6                  g_dai_P=1;
-1627   6                  g_dai_no_P=0;
-1628   6                }
-1629   5                else if(g_key_code==4)
-1630   5                {
-1631   6                  g_work_mode=LAO_HUO_MAN_DUN;
-1632   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1633   6                  g_yu_yue_shi_jian=0;
-1634   6                  g_yu_yue_ing=0;
-1635   6                  g_peng_ren_wen_du=100;
-1636   6                  g_dai_P=0;
+1537   6                  if(g_work_mode==DIN_WEN_PENG_REN)
+1538   6                  {
+1539   7                    key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();key_jian();
+1540   7                  }
+1541   6                }
+1542   5                else if(g_key_code==1 && g_work_mode==DIN_WEN_PENG_REN && g_work_start==0)
+1543   5                {
+1544   6                  if(g_seting_wen_du==1)
+1545   6                  {
+1546   7                    g_peng_ren_wen_du++;
+1547   7                  }           
+1548   6                  if(g_peng_ren_wen_du>90)
+1549   6                  {
+1550   7                    g_peng_ren_wen_du=45;
+1551   7                  }
+1552   6                }
+1553   5                one_times=0;
+1554   5              }
+1555   4              if(g_key_code==13 && g_kid_lock==1)
+1556   4              {
+1557   5                g_kid_lock=0;
+1558   5                buzzer(2);
+1559   5              }
+1560   4              
+1561   4            }
+1562   3            if(g_work_start==0)
+1563   3            {
+1564   4              g_operate_counter=0;
+1565   4            }
+1566   3      
+1567   3          }
+1568   2          else 
+1569   2          { 
+1570   3      
+1571   3            long_press_counter=0;
+1572   3            key_on=1;
+1573   3      
+1574   3            if(g_stop_counter>=240000)
+1575   3            {
+1576   4              g_stop_counter=0;
+1577   4              return;
+1578   4            }
+1579   3            g_stop_counter=0;
+1580   3            if(g_kid_lock==0)
+1581   3            {
+1582   4              if(g_work_start==0)
+1583   4              {
+1584   5                g_operate_counter=0;
+1585   5                if(g_key_code==1)
+1586   5                {
+1587   6                  buzzer(1);
+1588   6                  if(g_work_mode!=DIN_WEN_PENG_REN)
+1589   6                  {
+1590   7                    g_work_mode=DIN_WEN_PENG_REN;
+1591   7                    g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1592   7                    g_yu_yue_shi_jian=0;
+1593   7                    g_yu_yue_ing=0;
+1594   7                    g_peng_ren_wen_du=50;
+1595   7      
+1596   7                  }
+1597   6                  else
+1598   6                  {
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 27  
+
+1599   7                    if(g_seting_wen_du==1)
+1600   7                    {
+1601   8                      g_peng_ren_wen_du++;
+1602   8                    }           
+1603   7                    if(g_peng_ren_wen_du>90)
+1604   7                    {
+1605   8                      g_peng_ren_wen_du=45;
+1606   8                    }
+1607   7                    g_seting_wen_du=1;
+1608   7                  }
+1609   6                  g_dai_P=0;
+1610   6                  g_dai_no_P=1;
+1611   6                  
+1612   6                }
+1613   5                else if(g_key_code==2)
+1614   5                {
+1615   6                  buzzer(1);
+1616   6                  g_work_mode=DUN_ROU;
+1617   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1618   6                  g_yu_yue_shi_jian=0;
+1619   6                  g_yu_yue_ing=0;
+1620   6                  g_xiao_peng_ren_shi_jian=0;
+1621   6                  g_peng_ren_chang_duan_shi_jian=1;
+1622   6                  g_peng_ren_wen_du=165;
+1623   6                  g_dai_P=1;
+1624   6                  g_dai_no_P=0;
+1625   6                }
+1626   5                else if(g_key_code==3)
+1627   5                {
+1628   6                  buzzer(1);
+1629   6                  g_work_mode=DUN_TANG;
+1630   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1631   6                  g_yu_yue_shi_jian=0;
+1632   6                  g_yu_yue_ing=0;
+1633   6                  g_xiao_peng_ren_shi_jian=0;
+1634   6                  g_peng_ren_chang_duan_shi_jian=1;
+1635   6                  g_peng_ren_wen_du=165;
+1636   6                  g_dai_P=1;
 1637   6                  g_dai_no_P=0;
 1638   6                }
-1639   5                else if(g_key_code==5)
+1639   5                else if(g_key_code==4)
 1640   5                {
-1641   6                  g_work_mode=JIAN_KANG_ZHENG;
-1642   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1643   6                  g_yu_yue_shi_jian=0;
-1644   6                  g_yu_yue_ing=0;
-1645   6                  g_xiao_peng_ren_shi_jian=0;
-1646   6                  g_peng_ren_chang_duan_shi_jian=1;
-1647   6                  g_peng_ren_wen_du=165;
-1648   6                  g_dai_P=1;
-1649   6                  g_dai_no_P=0;
-1650   6                }
-1651   5                else if(g_key_code==6)
-1652   5                {
-1653   6                  g_work_mode=JIAN_CAO;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 28  
-
+1641   6                  buzzer(1);
+1642   6                  g_work_mode=LAO_HUO_MAN_DUN;
+1643   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1644   6                  g_yu_yue_shi_jian=0;
+1645   6                  g_yu_yue_ing=0;
+1646   6                  g_peng_ren_wen_du=100;
+1647   6                  g_dai_P=0;
+1648   6                  g_dai_no_P=0;
+1649   6                }
+1650   5                else if(g_key_code==5)
+1651   5                {
+1652   6                  buzzer(1);
+1653   6                  g_work_mode=JIAN_KANG_ZHENG;
 1654   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
 1655   6                  g_yu_yue_shi_jian=0;
 1656   6                  g_yu_yue_ing=0;
-1657   6                  g_peng_ren_wen_du=165;
-1658   6                  g_dai_P=1;
-1659   6                  g_dai_no_P=0;
-1660   6                }
-1661   5                else if(g_key_code==12)
-1662   5                {
-1663   6                  g_work_mode=MI_FAN;
-1664   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1665   6                  g_yu_yue_shi_jian=0;
-1666   6                  g_yu_yue_ing=0;
-1667   6                  g_xiao_peng_ren_shi_jian=0;
-1668   6                  g_peng_ren_chang_duan_shi_jian=1;
-1669   6                  g_peng_ren_wen_du=165;
-1670   6                  g_dai_P=1;
-1671   6                  g_dai_no_P=0;
-1672   6                }
-1673   5                else if(g_key_code==11)
-1674   5                {
-1675   6                  g_work_mode=DOU_LEI;
-1676   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1677   6                  g_yu_yue_shi_jian=0;
-1678   6                  g_yu_yue_ing=0;
-1679   6                  g_xiao_peng_ren_shi_jian=0;
-1680   6                  g_peng_ren_chang_duan_shi_jian=1;
-1681   6                  g_peng_ren_wen_du=165;
-1682   6                  g_dai_P=1;
-1683   6                  g_dai_no_P=0;
-1684   6                }
-1685   5                else if(g_key_code==10)
-1686   5                {
-1687   6                  g_work_mode=ZHA_LIANG;
-1688   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1689   6                  g_yu_yue_shi_jian=0;
-1690   6                  g_yu_yue_ing=0;
-1691   6                  g_xiao_peng_ren_shi_jian=0;
-1692   6                  g_peng_ren_chang_duan_shi_jian=1;
-1693   6                  g_peng_ren_wen_du=165;
-1694   6                  g_dai_P=1;
-1695   6                  g_dai_no_P=0;
-1696   6                }
-1697   5                else if(g_key_code==9)
-1698   5                {
-1699   6                  g_work_mode=YAN_MAI;
-1700   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1701   6                  g_yu_yue_shi_jian=0;
-1702   6                  g_yu_yue_ing=0;
-1703   6                  g_peng_ren_wen_du=165;
-1704   6                  g_dai_P=0;
-1705   6                  g_dai_no_P=0;
-1706   6                }
-1707   5                else if(g_key_code==8)
-1708   5                {
-1709   6                  g_work_mode=JI_DAN;
-1710   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1711   6                  g_yu_yue_shi_jian=0;
-1712   6                  g_yu_yue_ing=0;
-1713   6                  g_peng_ren_wen_du=90;
-1714   6                  g_dai_P=0;
-1715   6                  g_dai_no_P=1;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 29  
+1657   6                  g_xiao_peng_ren_shi_jian=0;
+1658   6                  g_peng_ren_chang_duan_shi_jian=1;
+1659   6                  g_peng_ren_wen_du=165;
+1660   6                  g_dai_P=1;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 28  
 
-1716   6                }
-1717   5                else if(g_key_code==18)
-1718   5                {
-1719   6                  
-1720   6                  if(g_fun_index1==0)
-1721   6                  {
-1722   7                    g_work_mode=SUAN_NAO;
-1723   7                    g_peng_ren_wen_du=40;
-1724   7                    g_dai_P=0;
-1725   7                    g_dai_no_P=0;
-1726   7                  }
-1727   6                  else if(g_fun_index1==1)
-1728   6                  {
-1729   7                    g_work_mode=FA_JIAO;
-1730   7                    g_peng_ren_wen_du=40;
-1731   7                    g_dai_P=0;
-1732   7                    g_dai_no_P=0;
-1733   7                  }
-1734   6                  else if(g_fun_index1==2)
-1735   6                  {
-1736   7                    g_work_mode=XIAO_DU;
-1737   7                    g_peng_ren_wen_du=165;
-1738   7                    g_dai_P=1;
-1739   7                    g_dai_no_P=0;
-1740   7                  }
-1741   6                  
-1742   6                  g_fun_index1++;
-1743   6                  if(g_fun_index1==3)
-1744   6                  {
-1745   7                    g_fun_index1=0;
-1746   7                  }
-1747   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1748   6                  g_yu_yue_shi_jian=0;
-1749   6                  g_yu_yue_ing=0;
-1750   6                  
-1751   6                }
-1752   5                else if(g_key_code==19)
-1753   5                {
-1754   6                  if(g_fun_index2==0)
-1755   6                  {
-1756   7                    g_work_mode=DAN_GAO;
-1757   7                    g_peng_ren_wen_du=165;
-1758   7                    g_dai_P=1;
-1759   7                    g_dai_no_P=0;
-1760   7                  }
-1761   6                  else if(g_fun_index2==1)
-1762   6                  {
-1763   7                    g_work_mode=FENG_PEI;
-1764   7                    g_peng_ren_wen_du=165;
-1765   7                    g_dai_P=1;
-1766   7                    g_dai_no_P=0;
-1767   7                  }
-1768   6                  else if(g_fun_index2==2)
-1769   6                  {
-1770   7                    g_work_mode=JI_YA;
-1771   7                    g_peng_ren_wen_du=165;
-1772   7                    g_dai_P=1;
-1773   7                    g_dai_no_P=0;
-1774   7                  }
-1775   6                  
-1776   6                  g_fun_index2++;
-1777   6                  if(g_fun_index2==3)
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 30  
+1661   6                  g_dai_no_P=0;
+1662   6                }
+1663   5                else if(g_key_code==6)
+1664   5                {
+1665   6                  buzzer(1);
+1666   6                  g_work_mode=JIAN_CAO;
+1667   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1668   6                  g_yu_yue_shi_jian=0;
+1669   6                  g_yu_yue_ing=0;
+1670   6                  g_peng_ren_wen_du=165;
+1671   6                  g_dai_P=1;
+1672   6                  g_dai_no_P=0;
+1673   6                }
+1674   5                else if(g_key_code==12)
+1675   5                {
+1676   6                  buzzer(1);
+1677   6                  g_work_mode=MI_FAN;
+1678   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1679   6                  g_yu_yue_shi_jian=0;
+1680   6                  g_yu_yue_ing=0;
+1681   6                  g_xiao_peng_ren_shi_jian=0;
+1682   6                  g_peng_ren_chang_duan_shi_jian=1;
+1683   6                  g_peng_ren_wen_du=165;
+1684   6                  g_dai_P=1;
+1685   6                  g_dai_no_P=0;
+1686   6                }
+1687   5                else if(g_key_code==11)
+1688   5                {
+1689   6                  buzzer(1);
+1690   6                  g_work_mode=DOU_LEI;
+1691   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1692   6                  g_yu_yue_shi_jian=0;
+1693   6                  g_yu_yue_ing=0;
+1694   6                  g_xiao_peng_ren_shi_jian=0;
+1695   6                  g_peng_ren_chang_duan_shi_jian=1;
+1696   6                  g_peng_ren_wen_du=165;
+1697   6                  g_dai_P=1;
+1698   6                  g_dai_no_P=0;
+1699   6                }
+1700   5                else if(g_key_code==10)
+1701   5                {
+1702   6                  buzzer(1);
+1703   6                  g_work_mode=ZHA_LIANG;
+1704   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1705   6                  g_yu_yue_shi_jian=0;
+1706   6                  g_yu_yue_ing=0;
+1707   6                  g_xiao_peng_ren_shi_jian=0;
+1708   6                  g_peng_ren_chang_duan_shi_jian=1;
+1709   6                  g_peng_ren_wen_du=165;
+1710   6                  g_dai_P=1;
+1711   6                  g_dai_no_P=0;
+1712   6                }
+1713   5                else if(g_key_code==9)
+1714   5                {
+1715   6                  buzzer(1);
+1716   6                  g_work_mode=YAN_MAI;
+1717   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1718   6                  g_yu_yue_shi_jian=0;
+1719   6                  g_yu_yue_ing=0;
+1720   6                  g_peng_ren_wen_du=165;
+1721   6                  g_dai_P=0;
+1722   6                  g_dai_no_P=0;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 29  
 
-1778   6                  {
-1779   7                    g_fun_index2=0;
+1723   6                }
+1724   5                else if(g_key_code==8)
+1725   5                {
+1726   6                  buzzer(1);
+1727   6                  g_work_mode=JI_DAN;
+1728   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1729   6                  g_yu_yue_shi_jian=0;
+1730   6                  g_yu_yue_ing=0;
+1731   6                  g_peng_ren_wen_du=90;
+1732   6                  g_dai_P=0;
+1733   6                  g_dai_no_P=1;
+1734   6                }
+1735   5                else if(g_key_code==18)
+1736   5                {
+1737   6                  buzzer(1);
+1738   6                  
+1739   6                  if(g_fun_index1==0)
+1740   6                  {
+1741   7                    g_work_mode=SUAN_NAO;
+1742   7                    g_peng_ren_wen_du=40;
+1743   7                    g_dai_P=0;
+1744   7                    g_dai_no_P=0;
+1745   7                  }
+1746   6                  else if(g_fun_index1==1)
+1747   6                  {
+1748   7                    g_work_mode=FA_JIAO;
+1749   7                    g_peng_ren_wen_du=40;
+1750   7                    g_dai_P=0;
+1751   7                    g_dai_no_P=0;
+1752   7                  }
+1753   6                  else if(g_fun_index1==2)
+1754   6                  {
+1755   7                    g_work_mode=XIAO_DU;
+1756   7                    g_peng_ren_wen_du=165;
+1757   7                    g_dai_P=1;
+1758   7                    g_dai_no_P=0;
+1759   7                  }
+1760   6                  
+1761   6                  g_fun_index1++;
+1762   6                  if(g_fun_index1==3)
+1763   6                  {
+1764   7                    g_fun_index1=0;
+1765   7                  }
+1766   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1767   6                  g_yu_yue_shi_jian=0;
+1768   6                  g_yu_yue_ing=0;
+1769   6                  
+1770   6                }
+1771   5                else if(g_key_code==19)
+1772   5                {
+1773   6                  buzzer(1);
+1774   6                  if(g_fun_index2==0)
+1775   6                  {
+1776   7                    g_work_mode=DAN_GAO;
+1777   7                    g_peng_ren_wen_du=165;
+1778   7                    g_dai_P=1;
+1779   7                    g_dai_no_P=0;
 1780   7                  }
-1781   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1782   6                  g_yu_yue_shi_jian=0;
-1783   6                  g_yu_yue_ing=0;
-1784   6                }
-1785   5                else if(g_work_mode==0 && g_key_code==7)
-1786   5                {
-1787   6                  g_work_mode=BAO_WEN;
-1788   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-1789   6                  g_yu_yue_shi_jian=0;
-1790   6                  g_yu_yue_ing=0;
-1791   6                  g_peng_ren_wen_du=60;
-1792   6                  g_dai_P=0;
-1793   6                  g_dai_no_P=0;
-1794   6                  g_operate_counter=2500;
-1795   6                  g_working_counter=1500;
-1796   6                }
-1797   5                else if(g_work_mode!=0 && g_key_code==7)
-1798   5                {
-1799   6                  g_work_mode=STOP;
-1800   6                }
-1801   5                else if(g_key_code==13)
-1802   5                {
-1803   6                  g_kid_lock=1;
+1781   6                  else if(g_fun_index2==1)
+1782   6                  {
+1783   7                    g_work_mode=FENG_PEI;
+1784   7                    g_peng_ren_wen_du=165;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 30  
+
+1785   7                    g_dai_P=1;
+1786   7                    g_dai_no_P=0;
+1787   7                  }
+1788   6                  else if(g_fun_index2==2)
+1789   6                  {
+1790   7                    g_work_mode=JI_YA;
+1791   7                    g_peng_ren_wen_du=165;
+1792   7                    g_dai_P=1;
+1793   7                    g_dai_no_P=0;
+1794   7                  }
+1795   6                  
+1796   6                  g_fun_index2++;
+1797   6                  if(g_fun_index2==3)
+1798   6                  {
+1799   7                    g_fun_index2=0;
+1800   7                  }
+1801   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1802   6                  g_yu_yue_shi_jian=0;
+1803   6                  g_yu_yue_ing=0;
 1804   6                }
-1805   5                else if(g_key_code==14)
-1806   5                { 
-1807   6                  if(g_yu_yue_shi_jian==0 && 
-1808   6                    g_work_mode!=DIN_WEN_PENG_REN &&
-1809   6                    g_work_mode!=SUAN_NAO &&
-1810   6                    g_work_mode!=FA_JIAO &&
-1811   6                    g_work_mode!=BAO_WEN)
-1812   6                  {
-1813   7                    g_yu_yue_shi_jian=0;
-1814   7                    g_yu_yue_ing=1;
-1815   7                  }
-1816   6                  else 
-1817   6                  {
-1818   7                    g_yu_yue_shi_jian=0;
-1819   7                    g_yu_yue_ing=0;
-1820   7                  }
-1821   6                  
+1805   5                else if(g_work_mode==0 && g_key_code==7)
+1806   5                {
+1807   6                  buzzer(1);
+1808   6                  g_work_mode=BAO_WEN;
+1809   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+1810   6                  g_yu_yue_shi_jian=0;
+1811   6                  g_yu_yue_ing=0;
+1812   6                  g_peng_ren_wen_du=60;
+1813   6                  g_dai_P=0;
+1814   6                  g_dai_no_P=0;
+1815   6                  g_operate_counter=2500;
+1816   6                  g_working_counter=1500;
+1817   6                }
+1818   5                else if(g_work_mode!=0 && g_key_code==7)
+1819   5                {
+1820   6                  buzzer(1);
+1821   6                  g_work_mode=STOP;
 1822   6                }
-1823   5                else if(g_key_code==16 && g_work_mode!=0)
+1823   5                else if(g_key_code==13)
 1824   5                {
-1825   6                  g_seting_wen_du=0;
-1826   6                  key_plus();
+1825   6                  buzzer(1);
+1826   6                  g_kid_lock=1;
 1827   6                }
-1828   5                else if(g_key_code==15 && g_work_mode!=0)
-1829   5                {
-1830   6                  g_seting_wen_du=0;
-1831   6                  key_jian();
-1832   6                }
-1833   5                else if(g_key_code==17)
-1834   5                {
-1835   6                  g_seting_wen_du=0;
-1836   6                  xiao_peng_ren_shi_jian();
-1837   6                }
-1838   5      
-1839   5                if(g_work_mode!=DIN_WEN_PENG_REN)
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 31  
+1828   5                else if(g_key_code==14)
+1829   5                { 
+1830   6                  buzzer(1);
+1831   6                  if(g_yu_yue_shi_jian==0 && 
+1832   6                    g_work_mode!=DIN_WEN_PENG_REN &&
+1833   6                    g_work_mode!=SUAN_NAO &&
+1834   6                    g_work_mode!=FA_JIAO &&
+1835   6                    g_work_mode!=BAO_WEN &&
+1836   6                    g_work_mode!=JIAN_CAO)
+1837   6                  {
+1838   7                    g_yu_yue_shi_jian=0;
+1839   7                    g_yu_yue_ing=1;
+1840   7                  }
+1841   6                  else 
+1842   6                  {
+1843   7                    g_yu_yue_shi_jian=0;
+1844   7                    g_yu_yue_ing=0;
+1845   7                  }
+1846   6                  
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 31  
 
-1840   5                {
-1841   6                  g_seting_wen_du=0;
-1842   6                }
-1843   5                
-1844   5              }
-1845   4              else 
-1846   4              {
-1847   5                if(g_key_code==7)
-1848   5                {
-1849   6                  buzzer(1);
-1850   6                  g_work_mode=STOP;
-1851   6                }
-1852   5                if(g_key_code==13)
-1853   5                {
-1854   6                  buzzer(1);
-1855   6                  g_kid_lock=1;
-1856   6                }
-1857   5                if(g_key_code==1 && g_work_mode==DIN_WEN_PENG_REN)
-1858   5                {
-1859   6                  buzzer(1);
-1860   6                  g_working_counter=0;
-1861   6                }
-1862   5              }
-1863   4      
-1864   4            }
-1865   3            if(g_key_code==13)
-1866   3            {
-1867   4              buzzer(1);
-1868   4              g_kid_lock=1;
-1869   4            }
-1870   3      
-1871   3          }
-1872   2          
-1873   2      
-1874   2        }
-1875   1        else
-1876   1        {
-1877   2          key_on=0;
-1878   2        }
-1879   1      
-1880   1      
-1881   1        if(g_work_mode!=STOP && g_err_code==0)
-1882   1        {
-1883   2      
-1884   2          if(g_operate_counter<2500)
-1885   2          {
-1886   3            g_operate_counter++;      
-1887   3            if(g_operate_counter==1)
-1888   3            {
-1889   4              show_seting();
+1847   6                }
+1848   5                else if(g_key_code==16 && g_work_mode!=0)
+1849   5                {
+1850   6                  buzzer(1);
+1851   6                  g_seting_wen_du=0;
+1852   6                  key_plus();
+1853   6                }
+1854   5                else if(g_key_code==15 && g_work_mode!=0)
+1855   5                {
+1856   6                  buzzer(1);
+1857   6                  g_seting_wen_du=0;
+1858   6                  key_jian();
+1859   6                }
+1860   5                else if(g_key_code==17)
+1861   5                {
+1862   6                  g_seting_wen_du=0;
+1863   6                  xiao_peng_ren_shi_jian();
+1864   6                }
+1865   5                if(g_work_mode!=DIN_WEN_PENG_REN)
+1866   5                {
+1867   6                  g_seting_wen_du=0;
+1868   6                }
+1869   5                
+1870   5              }
+1871   4              else 
+1872   4              {
+1873   5                if(g_key_code==7)
+1874   5                {
+1875   6                  buzzer(1);
+1876   6                  g_work_mode=STOP;
+1877   6                }
+1878   5                if(g_key_code==13)
+1879   5                {
+1880   6                  buzzer(1);
+1881   6                  g_kid_lock=1;
+1882   6                }
+1883   5                if(g_key_code==1 && g_work_mode==DIN_WEN_PENG_REN)
+1884   5                {
+1885   6                  buzzer(1);
+1886   6                  g_working_counter=0;
+1887   6                }
+1888   5              }
+1889   4      
 1890   4            }
-1891   3            else if(g_operate_counter==250)
+1891   3            if(g_key_code==13)
 1892   3            {
-1893   4              show_none();
-1894   4              g_shi_jian_liang_dian=0;
+1893   4              buzzer(1);
+1894   4              g_kid_lock=1;
 1895   4            }
-1896   3            else if(g_operate_counter==500)
-1897   3            {
-1898   4              show_seting();
-1899   4            }
-1900   3            else if(g_operate_counter==750)
-1901   3            {
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 32  
+1896   3      
+1897   3          }
+1898   2          
+1899   2      
+1900   2        }
+1901   1        else
+1902   1        {
+1903   2          key_on=0;
+1904   2        }
+1905   1      
+1906   1      
+1907   1        if(g_work_mode!=STOP && g_err_code==0)
+1908   1        {
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 32  
 
-1902   4              show_none();
-1903   4              g_shi_jian_liang_dian=0;
-1904   4            }
-1905   3            else if(g_operate_counter==1000)
-1906   3            {
-1907   4              show_seting();
-1908   4            }
-1909   3            else if(g_operate_counter==1250)
-1910   3            {
-1911   4              show_none();
-1912   4              g_shi_jian_liang_dian=0;
-1913   4            }
-1914   3            else if(g_operate_counter==1500)
-1915   3            {
-1916   4              show_seting();
-1917   4            }
-1918   3            else if(g_operate_counter==1750)
-1919   3            {
-1920   4              show_none();
-1921   4              g_shi_jian_liang_dian=0;
-1922   4            }
-1923   3            else if(g_operate_counter==2000)
-1924   3            {
-1925   4              show_seting();
-1926   4              if(g_yu_yue_shi_jian==0 && g_yu_yue_ing==0)
-1927   4              {
-1928   5                buzzer(2);
-1929   5                g_operate_counter=2500;
-1930   5              }
-1931   4            }
-1932   3            else if(g_operate_counter==2250)
-1933   3            {
-1934   4              show_none();
-1935   4              g_shi_jian_liang_dian=0;
-1936   4            }
-1937   3            else if(g_operate_counter==2496)
-1938   3            {
-1939   4              show_seting();
-1940   4              buzzer(2);
-1941   4            }
-1942   3            
-1943   3            g_working_counter=1500;
-1944   3          }
-1945   2          else
-1946   2          {
-1947   3            g_work_start=1;
-1948   3            g_yu_yue_ing=0;
-1949   3            if(g_working_counter<1500)
+1909   2      
+1910   2          if(g_operate_counter<2500)
+1911   2          {
+1912   3            g_operate_counter++;      
+1913   3            if(g_operate_counter==1)
+1914   3            {
+1915   4              show_seting();
+1916   4            }
+1917   3            else if(g_operate_counter==250)
+1918   3            {
+1919   4              show_none();
+1920   4              g_shi_jian_liang_dian=0;
+1921   4            }
+1922   3            else if(g_operate_counter==500)
+1923   3            {
+1924   4              show_seting();
+1925   4            }
+1926   3            else if(g_operate_counter==750)
+1927   3            {
+1928   4              show_none();
+1929   4              g_shi_jian_liang_dian=0;
+1930   4            }
+1931   3            else if(g_operate_counter==1000)
+1932   3            {
+1933   4              show_seting();
+1934   4            }
+1935   3            else if(g_operate_counter==1250)
+1936   3            {
+1937   4              show_none();
+1938   4              g_shi_jian_liang_dian=0;
+1939   4            }
+1940   3            else if(g_operate_counter==1500)
+1941   3            {
+1942   4              show_seting();
+1943   4            }
+1944   3            else if(g_operate_counter==1750)
+1945   3            {
+1946   4              show_none();
+1947   4              g_shi_jian_liang_dian=0;
+1948   4            }
+1949   3            else if(g_operate_counter==2000)
 1950   3            {
-1951   4              g_working_counter++;
-1952   4              g_shu_ma_guan[0]='X';
-1953   4              g_shu_ma_guan[1]=g_peng_ren_wen_du/10;
-1954   4              g_shu_ma_guan[2]=g_peng_ren_wen_du%10;
-1955   4              g_shu_ma_guan[3]='C';
-1956   4              g_shi_jian_liang_dian=0;
+1951   4              show_seting();
+1952   4              if(g_yu_yue_shi_jian==0 && g_yu_yue_ing==0)
+1953   4              {
+1954   5                buzzer(2);
+1955   5                g_operate_counter=2500;
+1956   5              }
 1957   4            }
-1958   3            else
-1959   3            {   
+1958   3            else if(g_operate_counter==2250)
+1959   3            {
 1960   4              show_none();
-1961   4              show_shu_ma_guan_working();
-1962   4              show_led();
-1963   4      
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 33  
+1961   4              g_shi_jian_liang_dian=0;
+1962   4            }
+1963   3            else if(g_operate_counter==2496)
+1964   3            {
+1965   4              show_seting();
+1966   4              buzzer(2);
+1967   4            }
+1968   3            
+1969   3            g_working_counter=1500;
+1970   3          }
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 33  
 
-1964   4            }
-1965   3      
-1966   3            
-1967   3            if(g_yu_yue_shi_jian>0)
-1968   3            {
-1969   4              RLY=0;
-1970   4              g_hoting=0;
-1971   4            }
-1972   3            else
-1973   3            {
-1974   4              if(g_peng_ren_shi_chang>0)
-1975   4              {
-1976   5      
-1977   5                if(g_currnet_temp<g_peng_ren_wen_du && KG==0)
-1978   5                {
-1979   6                  if(g_currnet_temp+2<g_peng_ren_wen_du)
-1980   6                  {
-1981   7                    RLY=1;
-1982   7                    g_hoting=1; 
-1983   7                    g_RLY_work_time++;
-1984   7                  }           
-1985   6                }
-1986   5                else
-1987   5                {
-1988   6                  RLY=0;
-1989   6                  g_hoting=0;
-1990   6                  g_P_bao_ya_counter_start=1;
-1991   6                }
-1992   5      
-1993   5                if( g_work_mode==DIN_WEN_PENG_REN && g_hoting==1)
-1994   5                {
-1995   6                  static u32 t_hot=0;
-1996   6                  if(g_P_bao_ya_counter_start==1)
-1997   6                  {
-1998   7                    t_hot+=2;
-1999   7                    if(g_peng_ren_wen_du<70)
-2000   7                    {
-2001   8      
-2002   8                      if(t_hot<10000)
-2003   8                      {
-2004   9      
-2005   9                      }
-2006   8                      else if(t_hot<20000)
-2007   8                      {
-2008   9                        RLY=0;
-2009   9                      }
-2010   8                      else
-2011   8                      {
-2012   9                        t_hot=0;
-2013   9                      }
-2014   8                    }
-2015   7                    else
-2016   7                    {
-2017   8                      if(t_hot<15000)
-2018   8                      {
-2019   9      
-2020   9                      }
-2021   8                      else if(t_hot<25000)
-2022   8                      {
-2023   9                        RLY=0;
-2024   9                      }
-2025   8                      else
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 34  
+1971   2          else
+1972   2          {
+1973   3            g_work_start=1;
+1974   3            g_yu_yue_ing=0;
+1975   3            if(g_working_counter<1500)
+1976   3            {
+1977   4              g_working_counter++;
+1978   4              g_shu_ma_guan[0]='X';
+1979   4              g_shu_ma_guan[1]=g_peng_ren_wen_du/10;
+1980   4              g_shu_ma_guan[2]=g_peng_ren_wen_du%10;
+1981   4              g_shu_ma_guan[3]='C';
+1982   4              g_shi_jian_liang_dian=0;
+1983   4            }
+1984   3            else
+1985   3            {   
+1986   4              show_none();
+1987   4              show_shu_ma_guan_working();
+1988   4              show_led();
+1989   4      
+1990   4            }
+1991   3      
+1992   3            
+1993   3            if(g_yu_yue_shi_jian>0)
+1994   3            {
+1995   4              RLY=0;
+1996   4              g_hoting=0;
+1997   4            }
+1998   3            else
+1999   3            {
+2000   4              if(g_peng_ren_shi_chang>0)
+2001   4              {
+2002   5      
+2003   5                if(g_currnet_temp<g_peng_ren_wen_du && KG==0)
+2004   5                {
+2005   6                  if(g_currnet_temp+5<g_peng_ren_wen_du)
+2006   6                  {
+2007   7                    RLY=1;
+2008   7                    g_hoting=1; 
+2009   7                    g_RLY_work_time++;
+2010   7                  }           
+2011   6                }
+2012   5                else
+2013   5                {
+2014   6                  RLY=0;
+2015   6                  g_hoting=0;
+2016   6                  g_P_bao_ya_counter_start=1;
+2017   6                }
+2018   5      
+2019   5                if( g_work_mode==DIN_WEN_PENG_REN && g_hoting==1)
+2020   5                {
+2021   6                  static u32 t_hot=0;
+2022   6                  if(g_P_bao_ya_counter_start==1)
+2023   6                  {
+2024   7                    t_hot+=2;
+2025   7                    if(g_peng_ren_wen_du<70)
+2026   7                    {
+2027   8      
+2028   8                      if(t_hot<10000)
+2029   8                      {
+2030   9      
+2031   9                      }
+2032   8                      else if(t_hot<20000)
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 34  
 
-2026   8                      {
-2027   9                        t_hot=0;
-2028   9                      }
-2029   8                    }
-2030   7                    
-2031   7                  }
-2032   6                }
-2033   5                
-2034   5              }
-2035   4              else
-2036   4              {
-2037   5                if(g_work_mode!=BAO_WEN)
-2038   5                {
-2039   6                  g_work_mode=BAO_WEN;
-2040   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
-2041   6                  g_yu_yue_shi_jian=0;
-2042   6                  g_peng_ren_wen_du=60;
-2043   6                  g_peng_ren_over=1;
-2044   6                  buzzer(5);
-2045   6                }
-2046   5                else
-2047   5                {
-2048   6                  g_work_mode=STOP;
-2049   6                }
-2050   5                
-2051   5              }
-2052   4            }
-2053   3      
-2054   3          }
-2055   2      
-2056   2        }
-2057   1        else
-2058   1        {
-2059   2          show_stop();
-2060   2          g_peng_ren_shi_chang=0;
-2061   2          g_peng_ren_wen_du=0;
-2062   2          g_work_start=0;
-2063   2          g_yu_yue_shi_jian=0;
-2064   2          g_operate_counter=0;
-2065   2          g_work_counter=0;
-2066   2          RLY=0;
-2067   2          g_hoting=0;
-2068   2          g_P_bao_ya_counter_start=0;
-2069   2          g_yu_yue_ing=0;
-2070   2          g_fun_index2=0;
-2071   2          g_fun_index1=0;
-2072   2        }
-2073   1      }
-2074          void main()
-2075          {
-2076   1        short tt=0;
-2077   1      /************************************ÏµÍ³³õÊ¼»¯****************************************/
-2078   1        CLKSWR = 0x51;            //Ñ¡ÔñÄÚ²¿¸ßÆµRCÎªÏµÍ³Ê±ÖÓ£¬ÄÚ²¿¸ßÆµRC 2·ÖÆµ£¬F
+2033   8                      {
+2034   9                        RLY=0;
+2035   9                      }
+2036   8                      else
+2037   8                      {
+2038   9                        t_hot=0;
+2039   9                      }
+2040   8                    }
+2041   7                    else
+2042   7                    {
+2043   8                      if(t_hot<15000)
+2044   8                      {
+2045   9      
+2046   9                      }
+2047   8                      else if(t_hot<25000)
+2048   8                      {
+2049   9                        RLY=0;
+2050   9                      }
+2051   8                      else
+2052   8                      {
+2053   9                        t_hot=0;
+2054   9                      }
+2055   8                    }
+2056   7                    
+2057   7                  }
+2058   6                }
+2059   5                
+2060   5              }
+2061   4              else
+2062   4              {
+2063   5                if(g_work_mode!=BAO_WEN)
+2064   5                {
+2065   6                  g_work_mode=BAO_WEN;
+2066   6                  g_peng_ren_shi_chang=g_default_time[g_work_mode];
+2067   6                  g_yu_yue_shi_jian=0;
+2068   6                  g_peng_ren_wen_du=60;
+2069   6                  g_peng_ren_over=1;
+2070   6                  buzzer(5);
+2071   6                }
+2072   5                else
+2073   5                {
+2074   6                  g_work_mode=STOP;
+2075   6                }
+2076   5                
+2077   5              }
+2078   4            }
+2079   3      
+2080   3          }
+2081   2      
+2082   2        }
+2083   1        else
+2084   1        {
+2085   2          show_stop();
+2086   2          g_peng_ren_shi_chang=0;
+2087   2          g_peng_ren_wen_du=0;
+2088   2          g_work_start=0;
+2089   2          g_yu_yue_shi_jian=0;
+2090   2          g_operate_counter=0;
+2091   2          g_work_counter=0;
+2092   2          RLY=0;
+2093   2          g_hoting=0;
+2094   2          g_P_bao_ya_counter_start=0;
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 35  
+
+2095   2          g_yu_yue_ing=0;
+2096   2          g_fun_index2=0;
+2097   2          g_fun_index1=0;
+2098   2        }
+2099   1      }
+2100          void main()
+2101          {
+2102   1        short tt=0;
+2103   1      /************************************ÏµÍ³³õÊ¼»¯****************************************/
+2104   1        CLKSWR = 0x51;            //Ñ¡ÔñÄÚ²¿¸ßÆµRCÎªÏµÍ³Ê±ÖÓ£¬ÄÚ²¿¸ßÆµRC 2·ÖÆµ£¬F
              -osc=16MHz
-2079   1        CLKDIV = 0x01;            //Fosc 1·ÖÆµµÃµ½Fcpu£¬Fcpu=16MHz 
-2080   1      /**********************************UARTÅäÖÃ³õÊ¼»¯**************************************/
-2081   1        // init_uart1();
-2082   1        init_ntc_adc();
-2083   1        init_timer0();
-2084   1        init_display();
-2085   1        EA = 1;               //Ê¹ÄÜ×ÜÖÐ¶Ï
-2086   1          C_RLY = PP_OUTPUT;
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 35  
-
-2087   1          C_KG =IN_INPUT;
-2088   1         
-2089   1          show_all();
-2090   1          buzzer(2);
-2091   1          while(tt++<500)
-2092   1          {
-2093   2            Delay_ms(2);
-2094   2            buzzer(0);
-2095   2            display();
-2096   2          }
-2097   1         
-2098   1        while(1)
-2099   1        {
-2100   2          Delay_ms(2);
-2101   2          key_scan();
-2102   2          key_operate();
-2103   2          display();
-2104   2          buzzer(0);
-2105   2          check_ya_li_kai_guan();
-2106   2          if(tt>100)
-2107   2          {
-2108   3            get_temp();
-2109   3            tt=0;
-2110   3          }
-2111   2          tt++;
-2112   2          
-2113   2        }
-2114   1      }
-2115          /***************************************************************************************
-2116            * @ËµÃ÷   T0ÖÐ¶Ï·þÎñº¯Êý  1ms
-2117            * @²ÎÊý ÎÞ
-2118            * @·µ»ØÖµ ÎÞ
-2119            * @×¢   ÎÞ
-2120          ***************************************************************************************/
-2121          void TIMER0_Rpt(void) interrupt TIMER0_VECTOR
-2122          {
-2123   1        static unsigned int i=0;  
-2124   1        if(g_work_start==1)
+2105   1        CLKDIV = 0x01;            //Fosc 1·ÖÆµµÃµ½Fcpu£¬Fcpu=16MHz 
+2106   1      /**********************************UARTÅäÖÃ³õÊ¼»¯**************************************/
+2107   1        // init_uart1();
+2108   1        init_ntc_adc();
+2109   1        init_timer0();
+2110   1        init_display();
+2111   1        EA = 1;               //Ê¹ÄÜ×ÜÖÐ¶Ï
+2112   1          C_RLY = PP_OUTPUT;
+2113   1          C_KG =IN_INPUT;
+2114   1         
+2115   1          show_all();
+2116   1          buzzer(2);
+2117   1          while(tt++<500)
+2118   1          {
+2119   2            Delay_ms(2);
+2120   2            buzzer(0);
+2121   2            display();
+2122   2          }
+2123   1         
+2124   1        while(1)
 2125   1        {
-2126   2          if(i++>60000)
-2127   2          {
-2128   3            i=0;    
-2129   3            if(g_yu_yue_shi_jian>0)
-2130   3            {
-2131   4              g_yu_yue_shi_jian--;
-2132   4            }
-2133   3            else
-2134   3            {
-2135   4              if(g_peng_ren_shi_chang>0)
-2136   4              {
-2137   5                if(g_dai_P==1 || g_dai_no_P==1)
-2138   5                {
-2139   6                  if(g_P_bao_ya_counter_start==1)
-2140   6                  {
-2141   7                    g_peng_ren_shi_chang--;
-2142   7                  }
-2143   6                }
-2144   5                else
-2145   5                {
-2146   6                  g_peng_ren_shi_chang--;
-2147   6                }
-2148   5                
-C51 COMPILER V9.56.0.0   MAIN                                                              12/22/2020 20:45:52 PAGE 36  
+2126   2          Delay_ms(2);
+2127   2          key_scan();
+2128   2          key_operate();
+2129   2          display();
+2130   2          buzzer(0);
+2131   2          check_ya_li_kai_guan();
+2132   2          if(tt>100)
+2133   2          {
+2134   3            get_temp();
+2135   3            tt=0;
+2136   3          }
+2137   2          tt++;
+2138   2          
+2139   2        }
+2140   1      }
+2141          /***************************************************************************************
+2142            * @ËµÃ÷   T0ÖÐ¶Ï·þÎñº¯Êý  1ms
+2143            * @²ÎÊý ÎÞ
+2144            * @·µ»ØÖµ ÎÞ
+2145            * @×¢   ÎÞ
+2146          ***************************************************************************************/
+2147          void TIMER0_Rpt(void) interrupt TIMER0_VECTOR
+2148          {
+2149   1        static unsigned int i=0;  
+2150   1        if(g_work_start==1)
+2151   1        {
+2152   2          if(i++>60000)
+2153   2          {
+2154   3            i=0;    
+2155   3            if(g_yu_yue_shi_jian>0)
+C51 COMPILER V9.56.0.0   MAIN                                                              12/26/2020 13:12:13 PAGE 36  
 
-2149   5              }
-2150   4            }
-2151   3          }
-2152   2        }
-2153   1        else
-2154   1        {
-2155   2          i=0;
-2156   2        }         
-2157   1      }
-2158          /***************************************************************************************
-2159            * @ËµÃ÷   UART1ÖÐ¶Ï·þÎñº¯Êý
-2160            * @²ÎÊý ÎÞ
-2161            * @·µ»ØÖµ ÎÞ
-2162            * @×¢   ÎÞ
-2163          ***************************************************************************************/
-2164          void UART1_Rpt(void) interrupt UART1_VECTOR
-2165          {
-2166   1        if(SCON & 0x01)           //ÅÐ¶Ï½ÓÊÕÖÐ¶Ï±êÖ¾Î»
-2167   1        {
-2168   2        }                 
-2169   1      }
-2170          
+2156   3            {
+2157   4              g_yu_yue_shi_jian--;
+2158   4            }
+2159   3            else
+2160   3            {
+2161   4              if(g_peng_ren_shi_chang>0)
+2162   4              {
+2163   5                if(g_dai_P==1 || g_dai_no_P==1)
+2164   5                {
+2165   6                  if(g_P_bao_ya_counter_start==1)
+2166   6                  {
+2167   7                    g_peng_ren_shi_chang--;
+2168   7                  }
+2169   6                }
+2170   5                else
+2171   5                {
+2172   6                  g_peng_ren_shi_chang--;
+2173   6                }
+2174   5                
+2175   5              }
+2176   4            }
+2177   3          }
+2178   2        }
+2179   1        else
+2180   1        {
+2181   2          i=0;
+2182   2        }         
+2183   1      }
+2184          /***************************************************************************************
+2185            * @ËµÃ÷   UART1ÖÐ¶Ï·þÎñº¯Êý
+2186            * @²ÎÊý ÎÞ
+2187            * @·µ»ØÖµ ÎÞ
+2188            * @×¢   ÎÞ
+2189          ***************************************************************************************/
+2190          void UART1_Rpt(void) interrupt UART1_VECTOR
+2191          {
+2192   1        if(SCON & 0x01)           //ÅÐ¶Ï½ÓÊÕÖÐ¶Ï±êÖ¾Î»
+2193   1        {
+2194   2        }                 
+2195   1      }
+2196          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   6824    ----
+   CODE SIZE        =   6963    ----
    CONSTANT SIZE    =    400    ----
    XDATA SIZE       =     67    ----
    PDATA SIZE       =   ----    ----
